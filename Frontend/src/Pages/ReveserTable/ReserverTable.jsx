@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ReserverTable.css';
-
 import tableIcon from '../../assets/table.jpg';
 
 const BASE_API = 'http://localhost:4000';
@@ -49,7 +48,7 @@ export const ReserverTable = () => {
     }
 
     try {
-      const user_id = 'cliente_fake_id'; // TODO: substituir com ID real via autenticação
+      const user_id = 'cliente_fake_id'; // Substituir por ID real com autenticação
 
       await axios.post(`${BASE_API}/booking`, {
         ...form,
@@ -61,9 +60,14 @@ export const ReserverTable = () => {
       setForm({ name: '', phone: '', date: '', time: '' });
       setSelectedTable(null);
 
-      // Atualiza as mesas após reserva
       const updated = await axios.get(`${BASE_API}/tables`);
       setTables(updated.data.tables || []);
+
+      // ✅ Envia mensagem para o WhatsApp do cliente
+      const whatsappMessage = `Olá ${form.name}, sua reserva foi feita com sucesso para o dia ${form.date} às ${form.time} na mesa ${selectedTable.name}.`;
+      const phoneNumber = form.phone.replace(/\D/g, '');
+      const whatsappURL = `https://wa.me/55${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+      window.open(whatsappURL, '_blank');
     } catch (err) {
       console.error('Erro ao fazer reserva:', err);
       setMsg('❌ Erro ao fazer reserva.');
@@ -140,7 +144,7 @@ export const ReserverTable = () => {
         <input
           type="tel"
           name="phone"
-          placeholder="Telefone"
+          placeholder="Telefone com DDD"
           value={form.phone}
           onChange={handleFormChange}
           required
@@ -159,7 +163,7 @@ export const ReserverTable = () => {
           onChange={handleFormChange}
           required
         />
-        <button type="submit">Reservar</button>
+        <button type="submit">  Fazer a Reserva</button>
       </form>
 
       {/* ✅ Mensagem */}

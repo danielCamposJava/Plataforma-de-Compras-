@@ -1,0 +1,23 @@
+# Image base 
+FROM node:18
+
+# Diretorio de trabalho
+WORKDIR /Backend
+
+#Copia o s arquivos de dependencia 
+COPY packsjon*.json ./
+
+#Instale as dependencias 
+RUN npm  install
+
+#Copia o restante dos arquivos 
+COPY . .
+
+#Espoen a porta usada pelo app 
+EXPOSE 4000
+
+#Comando para usar o servidor 
+CMD ["node", "./server.js"]
+
+
+

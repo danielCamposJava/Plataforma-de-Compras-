@@ -1,0 +1,264 @@
+/* Reset básico para inputs e botões */
+input, select, button {
+  font-family: inherit;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+/* Container geral */
+.admin-page-reserve {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f7f9fc;
+  color: #333;
+}
+
+/* Container do conteúdo ao lado da sidebar */
+.admin-contente-rever {
+  display: flex;
+  flex: 1;
+  min-height: 0; /* Para scroll interno funcionar */
+}
+
+/* Conteúdo principal ao lado da sidebar */
+.reserver-manager {
+  flex: 1;
+  padding: 24px 32px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+}
+
+/* Título principal */
+.reserver-manager h2 {
+  margin-bottom: 24px;
+  font-weight: 600;
+  font-size: 2rem;
+  color: #222;
+}
+
+/* Mensagens de feedback */
+.reserver-manager p {
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+/* Filtro e botão popular */
+.reserver-manager > div:first-of-type {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.reserver-manager > div:first-of-type input[type="text"] {
+  flex-grow: 1;
+  min-width: 200px;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s;
+}
+
+.reserver-manager > div:first-of-type input[type="text"]:focus {
+  border-color: tomato;
+  outline: none;
+}
+
+.reserver-manager > div:first-of-type button {
+  background-color: tomato;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.reserver-manager > div:first-of-type button:disabled {
+  background-color: #9fa8da;
+  cursor: not-allowed;
+}
+
+.reserver-manager > div:first-of-type button:hover:not(:disabled) {
+  background-color: #2c3e9e;
+}
+
+/* Formulário de criação/edição */
+.reserver-manager form {
+  max-width: 600px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.reserver-manager form input,
+.reserver-manager form select {
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s;
+}
+
+.reserver-manager form input:focus,
+.reserver-manager form select:focus {
+  border-color: tomato;
+  outline: none;
+}
+
+.reserver-manager form button {
+  width: 150px;
+  align-self: flex-start;
+  background-color: tomato;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.reserver-manager form button:disabled {
+  background-color: #9fa8da;
+  cursor: not-allowed;
+}
+
+.reserver-manager form button:hover:not(:disabled) {
+  background-color: #2c3e9e;
+}
+
+/* Tabela responsiva */
+.table-list {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 5px rgb(0 0 0 / 0.1);
+}
+
+.table-list thead {
+  background-color: tomato;
+  color: white;
+  text-align: left;
+}
+
+.table-list th,
+.table-list td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  vertical-align: middle;
+}
+
+.table-list tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Ações - botões na tabela */
+.table-list button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+
+.table-list button:hover {
+  background-color: #ddd;
+}
+
+.table-list button:first-of-type {
+  color: tomato;
+  margin-right: 8px;
+}
+
+.table-list button:last-of-type {
+  color: #d32f2f;
+}
+
+/* Paginação */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  font-weight: 600;
+  color: #555;
+}
+
+.pagination-controls button {
+  background-color: tomato;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination-controls button:disabled {
+  background-color: #9fa8da;
+  cursor: not-allowed;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background-color: tomato;
+}
+
+/* Responsividade */
+
+@media (max-width: 768px) {
+  .reserver-manager > div:first-of-type {
+    flex-direction: column;
+  }
+
+  .reserver-manager form {
+    max-width: 100%;
+  }
+
+  .table-list thead {
+    display: none;
+  }
+
+  .table-list,
+  .table-list tbody,
+  .table-list tr,
+  .table-list td {
+    display: block;
+    width: 100%;
+  }
+
+  .table-list tr {
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 12px;
+  }
+
+  .table-list td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+    border: none;
+    border-bottom: 1px solid #eee;
+  }
+
+  .table-list td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 16px;
+    width: 45%;
+    padding-left: 10px;
+    font-weight: 600;
+    text-align: left;
+  }
+}

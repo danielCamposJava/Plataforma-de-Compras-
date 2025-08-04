@@ -1,7 +1,7 @@
 import React from 'react';
 import './Sidbar.css';
 import { useNavigate } from 'react-router-dom';
-import { MdAddBox, MdDashboard, MdCategory, MdListAlt } from 'react-icons/md'; // importando ícones
+import { MdAddBox, MdDashboard, MdCategory, MdListAlt, MdTableBar } from 'react-icons/md'; // importando ícones
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -24,11 +24,19 @@ const Sidebar = () => {
           <MdListAlt size={24} />
           <p>Lista de Itens</p>
         </div>
-
+         
+            
+        <div className="sidebar-option" onClick={() => navigate('/admin/reserve')}>
+          <MdTableBar size={24} />
+          <p>Geremciar Mesas</p>
+        </div>
+      
         <div className="sidebar-option" onClick={() => navigate('/orders')}>
           <MdDashboard size={24} />
           <p>Dashboard</p>
         </div>
+
+
 
       </div>
     </div>

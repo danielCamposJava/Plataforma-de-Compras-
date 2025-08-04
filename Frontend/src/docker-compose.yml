@@ -1,0 +1,9 @@
+frontend:
+  volumes:
+    - ./frontend:/app
+    - /app/node_modules
+  command: npm run dev -- --host
+  ports:
+    - "5173:5173"
+
+
