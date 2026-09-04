@@ -1,4 +1,4 @@
-import db from '../Config/database.js'
+import db from '../config/database.js'
 
 
 export const createBooking = (req, res) => {

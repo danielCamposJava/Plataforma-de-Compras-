@@ -1,4 +1,4 @@
-import * as categoryRepository from '../repositories/categoryRepository.js';
+import * as categoryRepository from '../repositories/CategoryRepository.js';
 
 export const createCategory = async( title, image) => {
 
