@@ -24,6 +24,6 @@ router.get('/:id', getProductById);
 router.put('/:id', upload.single('image'), updateProduct);
 
 // ✅ Deletar  produto por nome (cuidado: esse tipo de deleção por nome pode ser perigoso se tiver nomes duplicados)
-router.delete('/name/:name', deleteProduct;
+router.delete('/name/:name', deleteProduct);
 
 export default router;

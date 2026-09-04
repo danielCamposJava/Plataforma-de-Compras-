@@ -91,6 +91,59 @@ db.run(`
   )
 `, log('foods'));
 
+// -------------------- MIGRAÇÃO foods -> products --------------------
+
+db.get(`
+    SELECT name
+    FROM sqlite_master
+    WHERE type='table'
+    AND name='foods'
+`, [], (err, row) => {
+
+    if (err) {
+        console.error(
+            '❌ Erro ao verificar tabela foods:',
+            err.message
+        );
+        return;
+    }
+
+    if (row) {
+
+        db.run(`
+            ALTER TABLE foods
+            RENAME TO products
+        `, (err) => {
+
+            if (err) {
+                console.error(
+                    '❌ Erro ao renomear foods para products:',
+                    err.message
+                );
+            } else {
+                console.log(
+                    '✅ Tabela foods renomeada para products'
+                );
+            }
+        });
+    }
+});
+
+// -------------------- TABELA products --------------------
+
+db.run(`
+  CREATE TABLE IF NOT EXISTS products (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    price REAL NOT NULL,
+    category TEXT NOT NULL,
+    image TEXT,
+    section_id INTEGER,
+    FOREIGN KEY (section_id) REFERENCES category(id)
+  )
+`, log('products'));
+
 // -------------------- TABELA orders --------------------
 db.run(`
   CREATE TABLE IF NOT EXISTS orders (
@@ -125,7 +178,7 @@ db.run(`
     image TEXT DEFAULT '',
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (order_id) REFERENCES orders(id),
-    FOREIGN KEY (food_id) REFERENCES foods(id)
+    FOREIGN KEY (food_id) REFERENCES products(id)
   )
 `, log('order_items'));
 
