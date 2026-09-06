@@ -1,93 +1,127 @@
-import * as repository from '../repositories/ProductRespository.js';
+import * as repository from "../repositories/ProductRespository.js";
 
+// ======================================================
+// CRIAR PRODUTO
+// ======================================================
 
-export const createProduct = async (data , file) => {
-     
-  const {
-    name,
-    descrption,
-    price,
-    category
-    
-  } = data;
+export const createProduct = async (data, file) => {
+    const { name, description, price, category } = data;
 
-  
-  if (!name?.trim()){
-
-    throw new Error('Nome é Obrigatorio');
-  }
-
-  if(!descriptio?.trim()){
-    throw new Error('Descrição é obrigatória');
-  }
-
-  if( price === undefined || price === '') {
-    throw new Error ('Preço é obrigatório' )
-  }
-
-  if(!category?.trim()){
-     throw new Error('Categorua é Obrigatória');
-  }
-
-  //Imagem
-  const image = file ? `uploads/${file.filename}` : null ;
-
-  const result = await repository.create({
-
-    name: name.trim(),
-    descrption:descrption.trim(),
-    price,
-    category: category.trim(),
-    image
-  });
-};
-
-export const  getProductById = async (id) => {
-
-    if(!id) {
-        throw new Error('Id do produto é obrigatorio');
+    if (!name?.trim()) {
+        throw new Error("Nome é obrigatório");
     }
 
-    const products = await repository.findById(id);
+    if (!description?.trim()) {
+        throw new Error("Descrição é obrigatória");
+    }
 
-    return products;
+    if (price === undefined || price === null || price === "") {
+        throw new Error("Preço é obrigatório");
+    }
+
+    if (!category?.trim()) {
+        throw new Error("Categoria é obrigatória");
+    }
+
+    const numericPrice = Number(price);
+
+    if (Number.isNaN(numericPrice) || numericPrice < 0) {
+        throw new Error("Preço inválido");
+    }
+
+    const image = file
+        ? `uploads/${file.filename}`
+        : null;
+
+    const result = await repository.create({
+        name: name.trim(),
+        description: description.trim(),
+        price: numericPrice,
+        category: category.trim(),
+        image
+    });
+
+    return {
+        id: result.id,
+        name: name.trim(),
+        description: description.trim(),
+        price: numericPrice,
+        category: category.trim(),
+        image
+    };
 };
 
-export const getAllProduct = async (page= 0, limit=10) => {
+// ======================================================
+// BUSCAR PRODUTO POR ID
+// ======================================================
 
-  if ( page < 0 ){
-       throw new Error('Pagina Inválida');
-  }
+export const getProductById = async (id) => {
+    const productId = Number(id);
 
-  if(limit <= 0) {
-    throw new Error('Limite inválido');
-  }
+    if (!productId) {
+        throw new Error("ID do produto é obrigatório");
+    }
 
-  //Paginação
+    const product = await repository.findById(productId);
 
-  const offset = page*limit;
+    if (!product) {
+        throw new Error("Produto não encontrado");
+    }
 
-  const products = await repository.findAll(
-    limit,
-    offset
-  );
-
-  // total
-  const total = await repository.count();
-
-  return{
-    data: products,
-    totalCount: total.total,
-    page,
-    limit
-  };
-
+    return product;
 };
 
-export const uploadProduct = async ( id, data, file ) => {
+// ======================================================
+// BUSCAR TODOS OS PRODUTOS
+// ======================================================
 
-    if (!id) {
-        throw new Error('Id do produto é obrigatório');
+export const getAllProducts = async (
+    page = 0,
+    limit = 10
+) => {
+    page = Number(page);
+    limit = Number(limit);
+
+    if (!Number.isInteger(page) || page < 0) {
+        throw new Error("Página inválida");
+    }
+
+    if (!Number.isInteger(limit) || limit <= 0) {
+        throw new Error("Limite inválido");
+    }
+
+    const offset = page * limit;
+
+    const products = await repository.findAll(
+        limit,
+        offset
+    );
+
+    const countResult = await repository.count();
+
+    return {
+        data: Array.isArray(products)
+            ? products
+            : [],
+        totalCount: countResult?.total || 0,
+        page,
+        limit
+    };
+};
+
+// ======================================================
+// ATUALIZAR PRODUTO
+// ======================================================
+
+export const updateProduct = async (
+    id,
+    data,
+    file
+) => {
+    const productId = Number(id);
+
+    if (!productId) {
+        throw new Error("ID do produto é obrigatório");
     }
 
     const {
@@ -97,65 +131,89 @@ export const uploadProduct = async ( id, data, file ) => {
         category
     } = data;
 
-    //Validação
-    if(!name?.trim()){
-        throw new Error('Nome é obrigatório');
+    if (!name?.trim()) {
+        throw new Error("Nome é obrigatório");
     }
 
-    if(!description?.trim()){
-        throw new Error('Descrição é obrigatória');    
+    if (!description?.trim()) {
+        throw new Error("Descrição é obrigatória");
     }
 
-    if ( price === undefined || price === null || ' '){
-        throw new Error('Preço é obrigatório');
+    if (price === undefined || price === null || price === "") {
+        throw new Error("Preço é obrigatório");
     }
 
-    if(!category?.trim()){
-        throw new Error('Categoria é obrigatória')
+    if (!category?.trim()) {
+        throw new Error("Categoria é obrigatória");
     }
 
-    //Buscar Produto
+    const numericPrice = Number(price);
 
-    const existinProduct = await repository.findById(id);
-
-    if(!existinProduct){
-
-        throw new Error('Produto não encontrado');
+    if (
+        Number.isNaN(numericPrice) ||
+        numericPrice < 0
+    ) {
+        throw new Error("Preço inválido");
     }
 
+    const existingProduct =
+        await repository.findById(productId);
 
-    //Imagem
-    const image = file ? `uploads/${file.filename}` : image;
+    if (!existingProduct) {
+        throw new Error("Produto não encontrado");
+    }
 
-    //Atualizar
-    const result = await repository.update(id,{
-        name: name.trim(),
-        description: description.trim(),
-        price,
-        category: category.trim(),
-        image
-    });
+    const image = file
+        ? `uploads/${file.filename}`
+        : existingProduct.image;
 
+    const result = await repository.update(
+        productId,
+        {
+            name: name.trim(),
+            description: description.trim(),
+            price: numericPrice,
+            category: category.trim(),
+            image
+        }
+    );
+
+    if (!result || result.changes === 0) {
+        throw new Error(
+            "Nenhuma alteração realizada"
+        );
+    }
+
+    return await repository.findById(productId);
+};
+
+// ======================================================
+// DELETAR PRODUTO
+// ======================================================
+
+export const deleteProduct = async (id) => {
+    const productId = Number(id);
+
+    if (!productId) {
+        throw new Error("ID do produto é obrigatório");
+    }
+
+    const existingProduct =
+        await repository.findById(productId);
+
+    if (!existingProduct) {
+        throw new Error("Produto não encontrado");
+    }
+
+    const result = await repository.remove(
+        productId
+    );
+
+    if (!result || result.changes === 0) {
+        throw new Error("Produto não encontrado");
+    }
 
     return {
-        message : 'Produto deletado com sucesso'
+        message: "Produto deletado com sucesso"
     };
 };
-
-export const deleteProduct = async ( id ) => {
-
-if( !id) {
-     throw new Error('Id do produto é obrigatório');
-}
-
-const result = await repository.remove(id);
-
-if(result.changes === 0){
-    throw new Error('Produto não encontrado');
-}
-
-return {
-    message: 'Produto deletado com sucesso '
-};
-
-}

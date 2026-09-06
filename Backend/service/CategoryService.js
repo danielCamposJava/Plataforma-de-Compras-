@@ -1,61 +1,69 @@
-import * as categoryRepository from '../repositories/CategoryRepository.js';
 
-export const createCategory = async( title, image) => {
+import * as categoryRepository from "../repositories/CategoryRepository.js";
 
-    if(!title?.trim()){
-        throw new Error('Categoria é obrigatória');
+
+export const createCategory = async (title, image) => {
+
+    if (!title?.trim()) {
+        throw new Error("Categoria é obrigatória");
     }
 
-    if(!image){
-        throw new Error('Imagem é obrigatoria');
+    if (!image) {
+        throw new Error("Imagem é obrigatória");
     }
 
-    return await categoryRepository.create(title,image);
-
+    return await categoryRepository.create(
+        title.trim(),
+        image
+    );
 };
 
+
 export const getAllCategories = async () => {
-  
-    return await categoryRepository.findAll();
 
-}
+    const categories = await categoryRepository.findAll();
 
-export const renameCategory = async ( id , title) => {
+    return Array.isArray(categories)
+        ? categories
+        : [];
+};
 
-    if(!id ){
 
-        throw new Error('Id é obrigatório');
-    }
-   
-    if(!title?.trim()) {
-        
-        throw new Error('Novo nome é obrigatório');
+export const renameCategory = async (id, title) => {
+
+    if (!id) {
+        throw new Error("ID é obrigatório");
     }
 
-   const update = await categoryRepository.updateName(id, title);
+    if (!title?.trim()) {
+        throw new Error("Novo nome é obrigatório");
+    }
 
-   if( update === 0) {
-    throw new Error('Categoria não encontrada');
-   }
+    const result = await categoryRepository.updateName(
+        id,
+        title.trim()
+    );
 
-   return update ;
+    if (!result || result.changes === 0) {
+        throw new Error("Categoria não encontrada");
+    }
 
-}
+    return result;
+};
 
-export const deleteCategory  = async (id) => {
 
-  if(!id) {
+export const deleteCategory = async (id) => {
 
-    throw new Error("Id é obrigatório");
-  }
+    if (!id) {
+        throw new Error("ID é obrigatório");
+    }
 
-  const deleted = await categoryRepository.remove(id);
+    const result = await categoryRepository.remove(id);
 
-  if (deleted === 0) {
+    if (!result || result.changes === 0) {
+        throw new Error("Categoria não encontrada");
+    }
 
-    throw new Error('Categoria não econtrada');
-  }
+    return result;
+};
 
-  return deleted;
-
-}

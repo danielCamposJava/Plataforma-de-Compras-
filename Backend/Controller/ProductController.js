@@ -1,129 +1,194 @@
 
-import * as  service from '../service/ProductService.js';
-
-export const  createProduct = async (req,res) => {
+import * as service from "../service/ProductService.js";
 
 
-   try{
-            const product = await service.createProduct(
-                
+// ======================================================
+// CRIAR
+// ======================================================
+
+export const createProduct = async (req, res) => {
+
+    try {
+
+        const product =
+            await service.createProduct(
                 req.body,
                 req.file
-            
-             );
-
-            return res.status(201).json(product);
-        
-   } catch(error){
-            
-      console.error(
-        ' Erro ao criar produto:',
-        error
-      );
-
-        return res.status(400).json({
-        message: err.message
-      
-    });
-   }
-};
-
-export const getCreateById = async (req,res) => {
-
-   try {
-    
-     const {id} = req.params;
-     const product = await service.getProductById(id);
-
-     return res.status(200).json(product);
+            );
 
 
-   }catch(error){
-      
-    console.error('Erro ao buscar produto:: ', error);
+        return res
+            .status(201)
+            .json(product);
 
-    return res.status(400).json({ message: error.message});
-   
-  }
-};
+    } catch (error) {
 
-export const getAllProduct = async (req,res) =>{
-
-    try{
-        const page =
-        Number(req.query.page ?? 0 );
-
-        const limit =
-        Number(req,query.limit ?? 10 );
-
-        const result = await service.getAllProduct(
-            page,
-            limit
-        );
-
-        return res.status(200).json(result);
-
-    }catch(error){
-       
         console.error(
-            'Erro ao busca alimentos',
+            "Erro ao criar produto:",
             error
         );
 
-        return res.status(500).json({
-            message:error.message
-        });
+
+        return res
+            .status(400)
+            .json({
+                message: error.message
+            });
     }
 };
 
 
-export const  updateProduct= async (req,res) => {
+// ======================================================
+// BUSCAR POR ID
+// ======================================================
 
-  try{
+export const getProductById = async (req, res) => {
 
-    const { id } = req.params;
+    try {
 
-    const product =  await service.uploadProduct(
-      
-        id,
-        req.body,
-        req.file
-    
-    );
-
-    return res.status(200).json({
-
-    });
+        const { id } = req.params;
 
 
-  }catch( error){
-     
-    console.error( 'Erro ao atualizar alimento: ',
-    error
-    
-    );    
-    return res.status(400).json({
-        message:error.message
-    });     
-  }
+        const product =
+            await service.getProductById(id);
+
+
+        return res
+            .status(200)
+            .json(product);
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao buscar produto:",
+            error
+        );
+
+
+        return res
+            .status(404)
+            .json({
+                message: error.message
+            });
+    }
 };
 
 
-export const deleteProduct = async (req,res) => {
+// ======================================================
+// BUSCAR TODOS
+// ======================================================
 
-    try{
+export const getAllProducts = async (req, res) => {
 
-        const {id } = req.params;
-        const result = await service.deleteProduct(id);
+    try {
 
-        return res.status(200).json(result);
+        const page =
+            Number(req.query.page ?? 0);
 
-    }catch(error) {
 
-        return res.status(404).json({
-        message:error.message
-       
-    });
- }
-        
+        const limit =
+            Number(req.query.limit ?? 10);
+
+
+        const products =
+            await service.getAllProducts(
+                page,
+                limit
+            );
+
+
+        return res
+            .status(200)
+            .json(products);
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao buscar produtos:",
+            error
+        );
+
+
+        return res
+            .status(500)
+            .json({
+                message: error.message
+            });
+    }
+};
+
+
+// ======================================================
+// ATUALIZAR
+// ======================================================
+
+export const updateProduct = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+
+        const product =
+            await service.updateProduct(
+                id,
+                req.body,
+                req.file
+            );
+
+
+        return res
+            .status(200)
+            .json(product);
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao atualizar produto:",
+            error
+        );
+
+
+        return res
+            .status(400)
+            .json({
+                message: error.message
+            });
+    }
+};
+
+
+// ======================================================
+// DELETAR
+// ======================================================
+
+export const deleteProduct = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+
+        const result =
+            await service.deleteProduct(id);
+
+
+        return res
+            .status(200)
+            .json(result);
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao deletar produto:",
+            error
+        );
+
+
+        return res
+            .status(404)
+            .json({
+                message: error.message
+            });
+    }
 };

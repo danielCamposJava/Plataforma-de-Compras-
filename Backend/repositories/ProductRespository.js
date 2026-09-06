@@ -1,90 +1,125 @@
-import db from "../config/database";
 
-export const create = async (products) => {
-   const sql =  `
+import { run, get, all } from "../config/database.js";
 
-     INSERT INTO products
-     (name,description,price,category,image)
-     VALUES(?,?,?,?,?)
+// ======================================================
+// CRIAR PRODUTO
+// ======================================================
 
-     `;
+export const create = async (product) => {
+    const sql = `
+        INSERT INTO products (
+            name,
+            description,
+            price,
+            category,
+            image
+        )
+        VALUES (?, ?, ?, ?, ?)
+    `;
 
-  return await db.run(sql,[
-   
-     products.name,
-     products.description,
-     products.price,
-     products.category,
-     products.image
-  
+    return await run(sql, [
+        product.name,
+        product.description,
+        product.price,
+        product.category,
+        product.image
     ]);
-
 };
 
-export const findById= async (id) =>
-    {
-        return await db.get(
+// ======================================================
+// BUSCAR POR ID
+// ======================================================
 
-            'SELECT * FROM products  WHERE id = ? ',
-            [id]           
-            
-        );
-  
-};
+export const findById = async (id) => {
+    console.log("========================================");
+    console.log("🔎 BUSCANDO PRODUTO POR ID");
+    console.log("ID recebido:", id);
+    console.log("Tipo do ID:", typeof id);
 
-export const findAll = async(limit, offset) => {
-  
-    if(limit && offset >= 0){
+    const sql = `
+        SELECT *
+        FROM products
+        WHERE id = ?
+    `;
 
-        return await db.all(
-           
-            'SELECT * FROM products LIMIT ? OFFSET ',
-            [limit,offset]
-            
-        );
+    try {
+        const product = await get(sql, [id]);
+
+        console.log("📦 PRODUTO ENCONTRADO:", product);
+        console.log("========================================");
+
+        return product;
+    } catch (error) {
+        console.error("❌ ERRO AO BUSCAR PRODUTO:", error);
+        throw error;
     }
 };
 
+// ======================================================
+// BUSCAR TODOS
+// ======================================================
+
+export const findAll = async (limit = 10, offset = 0) => {
+    const sql = `
+        SELECT *
+        FROM products
+        ORDER BY id DESC
+        LIMIT ?
+        OFFSET ?
+    `;
+
+    return await all(sql, [limit, offset]);
+};
+
+// ======================================================
+// CONTAR
+// ======================================================
 
 export const count = async () => {
-    return await db.get(
-          
-        'SELECT COUNT(*) as total FROM products'
-    
-    );
-}
+    const sql = `
+        SELECT COUNT(*) AS total
+        FROM products
+    `;
 
-export const update = async (id, products) => {
+    return await get(sql);
+};
 
+// ======================================================
+// ATUALIZAR
+// ======================================================
+
+export const update = async (id, product) => {
     const sql = `
         UPDATE products
         SET
             name = ?,
             description = ?,
             price = ?,
-            category= ?,
-            image = ?,
-        WHERE id = ?    
-    
+            category = ?,
+            image = ?
+        WHERE id = ?
     `;
 
-    return await db.run( sql,[
-      
-        products.name,
-        products.description,
-        products.price,
-        products.category,
-        products.image,
+    return await run(sql, [
+        product.name,
+        product.description,
+        product.price,
+        product.category,
+        product.image,
         id
-    
     ]);
 };
 
+// ======================================================
+// DELETAR
+// ======================================================
 
 export const remove = async (id) => {
-   
-    return await db.run(
-        'DELETE FROM products WHERE id = ? ',
-        [id]
-    );
+    const sql = `
+        DELETE FROM products
+        WHERE id = ?
+    `;
+
+    return await run(sql, [id]);
 };
+
