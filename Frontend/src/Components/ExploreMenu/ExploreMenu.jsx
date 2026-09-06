@@ -1,229 +1,257 @@
 
-import React, {
-  useEffect,
-  useRef,
-  useContext
-} from "react";
+import React, { useEffect, useRef, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 import "./ExploreMenu.css";
 
 import {
-  FiHome,
-  FiChevronLeft,
-  FiChevronRight
+    FiHome,
+    FiChevronLeft,
+    FiChevronRight
 } from "react-icons/fi";
 
-import {
-  StoreContext
-} from "../../Content/StoreContent";
+import { StoreContext } from "../../Content/StoreContent";
 
 const ExploreMenu = ({
-  category,
-  setCategory
+    category,
+    setCategory
 }) => {
 
-  const carouselRef = useRef(null);
+    const carouselRef = useRef(null);
+    const navigate = useNavigate();
 
-  const {
-    categories,
-    fetchCategories
-  } = useContext(StoreContext);
+    const {
+        categories,
+        fetchCategories
+    } = useContext(StoreContext);
 
-  // ==================================================
-  // BUSCAR CATEGORIAS
-  // ==================================================
-  useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
+    // ==================================================
+    // BUSCAR CATEGORIAS
+    // ==================================================
 
-  // ==================================================
-  // CATEGORIA SALVA
-  // ==================================================
-  useEffect(() => {
-    const savedCategory = localStorage.getItem(
-      "selectedCategory"
-    );
+    useEffect(() => {
+        fetchCategories();
+    }, []);
 
-    if (savedCategory) {
-      setCategory(savedCategory);
-    }
-  }, [setCategory]);
+    // ==================================================
+    // CATEGORIA SALVA
+    // ==================================================
 
-  // ==================================================
-  // SELECIONAR CATEGORIA
-  // ==================================================
-  const handleCategoryClick = (catTitle) => {
+    useEffect(() => {
 
-    const newCategory =
-      catTitle === "Home"
-        ? "All"
-        : catTitle;
+        const savedCategory =
+            localStorage.getItem("selectedCategory");
 
-    setCategory(newCategory);
+        if (savedCategory) {
+            setCategory(savedCategory);
+        }
 
-    localStorage.setItem(
-      "selectedCategory",
-      newCategory
-    );
-  };
+    }, [setCategory]);
 
-  // ==================================================
-  // SCROLL PARA ESQUERDA
-  // ==================================================
-  const scrollLeft = () => {
+    // ==================================================
+    // SELECIONAR CATEGORIA
+    // ==================================================
 
-    if (carouselRef.current) {
+    const handleCategoryClick = (catTitle) => {
 
-      carouselRef.current.scrollBy({
-        left: -280,
-        behavior: "smooth"
-      });
+        // HOME / TODOS
+        if (catTitle === "Home") {
 
-    }
-  };
+            setCategory("All");
 
-  // ==================================================
-  // SCROLL PARA DIREITA
-  // ==================================================
-  const scrollRight = () => {
+            localStorage.setItem(
+                "selectedCategory",
+                "All"
+            );
 
-    if (carouselRef.current) {
+            navigate("/");
 
-      carouselRef.current.scrollBy({
-        left: 280,
-        behavior: "smooth"
-      });
+            return;
+        }
 
-    }
-  };
+        // CATEGORIA
+        setCategory(catTitle);
 
-  // ==================================================
-  // RENDER
-  // ==================================================
-  return (
+        localStorage.setItem(
+            "selectedCategory",
+            catTitle
+        );
 
-    <section
-      className="explore-menu"
-      id="explore-menu"
-    >
+        // IR PARA PÁGINA DA CATEGORIA
+        navigate(
+            `/categoria/${encodeURIComponent(catTitle)}`
+        );
+    };
 
-      <div className="explore-menu-header">
+    // ==================================================
+    // SCROLL ESQUERDA
+    // ==================================================
 
-        <div>
-          <h2>Explore Categories</h2>
+    const scrollLeft = () => {
 
-          <p>
-            Encontre o estilo perfeito para você
-          </p>
-        </div>
+        if (carouselRef.current) {
 
-      </div>
+            carouselRef.current.scrollBy({
+                left: -280,
+                behavior: "smooth"
+            });
+        }
+    };
 
-      <div className="carousel-container">
+    // ==================================================
+    // SCROLL DIREITA
+    // ==================================================
 
-        {/* SETA ESQUERDA */}
-        <button
-          className="arrow left"
-          onClick={scrollLeft}
-          aria-label="Categorias anteriores"
-        >
-          <FiChevronLeft />
-        </button>
+    const scrollRight = () => {
 
-        {/* CATEGORIAS */}
-        <div
-          className="explore-menu-list"
-          ref={carouselRef}
+        if (carouselRef.current) {
+
+            carouselRef.current.scrollBy({
+                left: 280,
+                behavior: "smooth"
+            });
+        }
+    };
+
+    // ==================================================
+    // RENDER
+    // ==================================================
+
+    return (
+        <section
+            className="explore-menu"
+            id="explore-menu"
         >
 
-          {/* HOME */}
-          <div
-            onClick={() =>
-              handleCategoryClick("Home")
-            }
-            className={`explore-menu-list-item ${
-              category === "All"
-                ? "selected"
-                : ""
-            }`}
-          >
+            <div className="explore-menu-header">
 
-            <div className="category-image home-icon">
+                <div>
 
-              <FiHome />
+                    <h2>
+                        Explore Categories
+                    </h2>
 
-            </div>
-
-            <p>Todos</p>
-
-          </div>
-
-          {/* CATEGORIAS */}
-          {Array.isArray(categories) &&
-            categories.map((cat) => (
-
-              <div
-                key={cat.id}
-                onClick={() =>
-                  handleCategoryClick(
-                    cat.title
-                  )
-                }
-                className={`explore-menu-list-item ${
-                  category === cat.title
-                    ? "selected"
-                    : ""
-                }`}
-              >
-
-                <div className="category-image">
-
-                  <img
-                    src={
-                      cat.image
-                        ? `http://localhost:4000/uploads/${cat.image}`
-                        : "/assets/default.png"
-                    }
-                    alt={cat.title}
-                    onError={(e) => {
-
-                      console.error(
-                        "Imagem não encontrada:",
-                        e.currentTarget.src
-                      );
-
-                      e.currentTarget.onerror = null;
-
-                      e.currentTarget.src =
-                        "/assets/default.png";
-                    }}
-                  />
+                    <p>
+                        Encontre o estilo perfeito para você
+                    </p>
 
                 </div>
 
-                <p>{cat.title}</p>
+            </div>
 
-              </div>
+            <div className="carousel-container">
 
-            ))
-          }
+                {/* SETA ESQUERDA */}
 
-        </div>
+                <button
+                    className="arrow left"
+                    onClick={scrollLeft}
+                    aria-label="Categorias anteriores"
+                >
+                    <FiChevronLeft />
+                </button>
 
-        {/* SETA DIREITA */}
-        <button
-          className="arrow right"
-          onClick={scrollRight}
-          aria-label="Próximas categorias"
-        >
-          <FiChevronRight />
-        </button>
+                {/* CATEGORIAS */}
 
-      </div>
+                <div
+                    className="explore-menu-list"
+                    ref={carouselRef}
+                >
 
-    </section>
-  );
+                    {/* TODOS */}
+
+                    <div
+                        onClick={() =>
+                            handleCategoryClick("Home")
+                        }
+                        className={`explore-menu-list-item ${
+                            category === "All"
+                                ? "selected"
+                                : ""
+                        }`}
+                    >
+
+                        <div className="category-image home-icon">
+
+                            <FiHome />
+
+                        </div>
+
+                        <p>
+                            Todos
+                        </p>
+
+                    </div>
+
+                    {/* CATEGORIAS */}
+
+                    {Array.isArray(categories) &&
+                        categories.map((cat) => (
+
+                            <div
+                                key={cat.id ?? cat._id}
+                                onClick={() =>
+                                    handleCategoryClick(
+                                        cat.title
+                                    )
+                                }
+                                className={`explore-menu-list-item ${
+                                    category === cat.title
+                                        ? "selected"
+                                        : ""
+                                }`}
+                            >
+
+                                <div className="category-image">
+
+                                    <img
+                                        src={
+                                            cat.image
+                                                ? `http://localhost:4000/uploads/${cat.image}`
+                                                : "/assets/default.png"
+                                        }
+                                        alt={cat.title}
+                                        onError={(e) => {
+
+                                            console.error(
+                                                "Imagem não encontrada:",
+                                                e.currentTarget.src
+                                            );
+
+                                            e.currentTarget.onerror = null;
+
+                                            e.currentTarget.src =
+                                                "/assets/default.png";
+                                        }}
+                                    />
+
+                                </div>
+
+                                <p>
+                                    {cat.title}
+                                </p>
+
+                            </div>
+
+                        ))
+                    }
+
+                </div>
+
+                {/* SETA DIREITA */}
+
+                <button
+                    className="arrow right"
+                    onClick={scrollRight}
+                    aria-label="Próximas categorias"
+                >
+                    <FiChevronRight />
+                </button>
+
+            </div>
+
+        </section>
+    );
 };
 
 export default ExploreMenu;
-

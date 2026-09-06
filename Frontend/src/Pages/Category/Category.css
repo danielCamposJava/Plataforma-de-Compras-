@@ -1,0 +1,160 @@
+/* =========================================================
+   PÁGINA DA CATEGORIA
+========================================================= */
+
+.category-page {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px 5%;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
+.category-page-header {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.category-page-header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #333333;
+    text-transform: capitalize;
+}
+
+.category-page-header p {
+    margin: 6px 0 0;
+    color: #777777;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   BOTÃO VOLTAR
+========================================================= */
+
+.back-button {
+    border: none;
+    background: tomato;
+    color: white;
+
+    padding: 10px 18px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.back-button:hover {
+    background: #e5533d;
+    transform: translateX(-2px);
+}
+
+
+/* =========================================================
+   PRODUTOS
+========================================================= */
+
+.category-products {
+    display: grid;
+
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(180px, 1fr)
+    );
+
+    gap: 22px;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   CARD VAZIO
+========================================================= */
+
+.empty-category {
+    grid-column: 1 / -1;
+
+    text-align: center;
+
+    padding: 60px 20px;
+
+    color: #777777;
+
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .category-page {
+        padding: 25px 4%;
+    }
+
+    .category-products {
+        grid-template-columns: repeat(
+            auto-fill,
+            minmax(160px, 1fr)
+        );
+
+        gap: 18px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .category-page {
+        padding: 20px 15px;
+    }
+
+    .category-page-header {
+        align-items: flex-start;
+        gap: 15px;
+        flex-direction: column;
+    }
+
+    .category-page-header h1 {
+        font-size: 24px;
+    }
+
+    .category-products {
+        grid-template-columns: repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+        gap: 12px;
+    }
+
+}
+
+
+@media (max-width: 380px) {
+
+    .category-products {
+        grid-template-columns: 1fr;
+    }
+
+}

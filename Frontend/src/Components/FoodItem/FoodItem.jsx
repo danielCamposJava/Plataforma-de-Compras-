@@ -114,7 +114,7 @@ const FoodItem = ({
                 <Link to={`/product/${id}`}>
 
                     <button className="details-button">
-                        Olhar a comida
+                         ver produto 
                     </button>
 
                 </Link>

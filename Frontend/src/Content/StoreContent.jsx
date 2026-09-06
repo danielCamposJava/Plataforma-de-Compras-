@@ -55,9 +55,11 @@ const StoreContextProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
 
+    // Paginação
     const [page, setPage] = useState(0);
 
-    const [limit, setLimit] = useState(10);
+    // ALTERADO: antes era 10
+    const [limit, setLimit] = useState(1000);
 
     const [totalCount, setTotalCount] = useState(0);
 
@@ -93,7 +95,19 @@ const StoreContextProvider = ({ children }) => {
             const url =
                 `http://localhost:4000/api/foods?page=${currentPage}&limit=${currentLimit}`;
 
-            console.log("Buscando produtos:", url);
+            console.log(
+                "================================="
+            );
+
+            console.log(
+                "BUSCANDO PRODUTOS:"
+            );
+
+            console.log(url);
+
+            console.log(
+                "================================="
+            );
 
             const response = await fetch(url, {
                 method: "GET",
@@ -103,7 +117,7 @@ const StoreContextProvider = ({ children }) => {
             });
 
             console.log(
-                "Status da API de produtos:",
+                "Status da API:",
                 response.status
             );
 
@@ -127,8 +141,12 @@ const StoreContextProvider = ({ children }) => {
             if (Array.isArray(result)) {
 
                 console.log(
-                    "API retornou array:",
-                    result
+                    "API retornou array"
+                );
+
+                console.log(
+                    "Total recebido:",
+                    result.length
                 );
 
                 setFoodList(result);
@@ -153,6 +171,11 @@ const StoreContextProvider = ({ children }) => {
                 );
 
                 console.log(
+                    "Quantidade recebida:",
+                    result.data.length
+                );
+
+                console.log(
                     "Total de produtos:",
                     result.totalCount
                 );
@@ -160,7 +183,8 @@ const StoreContextProvider = ({ children }) => {
                 setFoodList(result.data);
 
                 setTotalCount(
-                    Number(result.totalCount) || 0
+                    Number(result.totalCount) ||
+                    result.data.length
                 );
 
                 return result.data;
@@ -226,7 +250,8 @@ const StoreContextProvider = ({ children }) => {
                 );
             }
 
-            const result = await response.json();
+            const result =
+                await response.json();
 
             console.log(
                 "Categorias recebidas:",
@@ -238,9 +263,13 @@ const StoreContextProvider = ({ children }) => {
                 Array.isArray(result.categories)
             ) {
 
-                setCategories(result.categories);
+                setCategories(
+                    result.categories
+                );
 
-            } else if (Array.isArray(result)) {
+            } else if (
+                Array.isArray(result)
+            ) {
 
                 setCategories(result);
 
@@ -275,7 +304,8 @@ const StoreContextProvider = ({ children }) => {
 
     useEffect(() => {
 
-        fetchFoodList(0, 10);
+        // ALTERADO: busca até 1000 produtos
+        fetchFoodList(0, 1000);
 
         fetchCategories();
 
@@ -301,8 +331,10 @@ const StoreContextProvider = ({ children }) => {
 
     const refreshFoodList = async () => {
 
-        await fetchFoodList(page, limit);
-
+        await fetchFoodList(
+            page,
+            limit
+        );
     };
 
     // ========================================================
@@ -312,21 +344,26 @@ const StoreContextProvider = ({ children }) => {
     const addToCart = (cartItem) => {
 
         if (!cartItem) {
+
             console.warn(
                 "Produto inválido:",
                 cartItem
             );
+
             return;
         }
 
         const productId =
-            cartItem.id ?? cartItem._id;
+            cartItem.id ??
+            cartItem._id;
 
         if (!productId) {
+
             console.warn(
                 "Produto sem ID:",
                 cartItem
             );
+
             return;
         }
 
@@ -371,7 +408,9 @@ const StoreContextProvider = ({ children }) => {
                 const updatedItems =
                     [...previousItems];
 
-                updatedItems[existingItemIndex] = {
+                updatedItems[
+                    existingItemIndex
+                ] = {
 
                     ...updatedItems[
                         existingItemIndex
@@ -401,6 +440,7 @@ const StoreContextProvider = ({ children }) => {
             ...previousItems,
 
             {
+
                 product: {
 
                     ...cartItem,
@@ -459,6 +499,7 @@ const StoreContextProvider = ({ children }) => {
     // ========================================================
 
     const clearCart = () => {
+
         setCartItems([]);
     };
 
@@ -481,7 +522,6 @@ const StoreContextProvider = ({ children }) => {
             ...acompanhamento_arroz,
 
             ...acompanhamento_batata,
-
         ];
 
         const selectedAcompanhamento =
@@ -565,14 +605,17 @@ const StoreContextProvider = ({ children }) => {
         );
 
         console.log(
-            "FOOD LIST ATUALIZADA:"
+            "FOOD LIST ATUALIZADA"
         );
-
-        console.log(foodList);
 
         console.log(
             "Quantidade:",
             foodList.length
+        );
+
+        console.log(
+            "Produtos:",
+            foodList
         );
 
         console.log(
@@ -590,20 +633,15 @@ const StoreContextProvider = ({ children }) => {
         // Produtos
         food_list: foodList,
         foodList,
-
         setFoodList,
-
         fetchFoodList,
-
         refreshFoodList,
 
         // Paginação
         page,
         setPage,
-
         limit,
         setLimit,
-
         totalCount,
         setTotalCount,
 
@@ -619,7 +657,6 @@ const StoreContextProvider = ({ children }) => {
         // Carrinho
         cartItems,
         setCartItems,
-
         addToCart,
         removeFromCart,
         clearCart,
@@ -632,7 +669,6 @@ const StoreContextProvider = ({ children }) => {
         // Usuário
         user,
         setUser,
-
         login,
         logout,
     };
