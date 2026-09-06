@@ -108,32 +108,61 @@ export const CategoryManager = () => {
     }
   };
 
-  const handleDeleteCategory = async (category) => {
-    if (!window.confirm(`Tem certeza que deseja deletar a categoria "${category.title}"?`)) {
-      return;
+  
+const handleDeleteCategory = async (category) => {
+    const id = category?.id;
+
+    if (!id) {
+        setError("ID da categoria é obrigatório.");
+        return;
+    }
+
+    const confirmed = window.confirm(
+        `Tem certeza que deseja deletar a categoria "${category.title}"?`
+    );
+
+    if (!confirmed) {
+        return;
     }
 
     setLoading(true);
+    setError("");
+    setSuccess("");
+
     try {
-      await axios.delete(`http://localhost:4000/category/delete-category/${encodeURIComponent(category.title)}`);
-      setSuccess('Categoria deletada com sucesso!');
-      setError('');
-      if (selectedCategory && selectedCategory.id === category.id) {
+        console.log("ID da categoria:", id);
+
+        await axios.delete(
+            `http://localhost:4000/category/delete-category/${id}`
+        );
+
+        setSuccess("Categoria deletada com sucesso!");
+
         setSelectedCategory(null);
-      }
-      fetchCategories();
-    } catch {
-      setError('Erro ao deletar categoria');
-      setSuccess('');
+
+        await fetchCategories();
+
+    } catch (error) {
+        console.error("Erro ao deletar categoria:", error);
+        console.error("Status:", error.response?.status);
+        console.error("Resposta do backend:", error.response?.data);
+
+        setError(
+            error.response?.data?.message ||
+            "Erro ao deletar categoria"
+        );
+
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
+
 
   return (
     <div className="admin-page">
       <NavBarAdmin />
-      <div className="admin-content">
+      <div 
+      className="admin-content">
         <SideBar />
         <div className="category-manager">
           <h2>Gerenciar Categorias do Menu</h2>
