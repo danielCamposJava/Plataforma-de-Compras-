@@ -1,98 +1,144 @@
-/* Estilos gerais para o Header */
+
 .header {
-    background-image: url('/header_img.png'); /* Substitua pelo caminho da sua imagem */
-    background-size: cover;
-    background-position: center;
-    height: 80vh;
-    display: flex;
-    
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 20px;
-    color: white;
-    border-radius: 15px;
+  width: 100%;
+  min-height: 450px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 40px 7%;
+  gap: 60px;
+
+  box-sizing: border-box;
+}
+
+/* FOTO */
+.header-image {
+  width: 50%;
+  height: 400px;
+
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.header-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  display: block;
+}
+
+/* CONTEÚDO */
+.header-contents {
+  width: 50%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  gap: 20px;
+}
+
+.header-contents h2 {
+  font-size: 42px;
+  line-height: 1.2;
+  margin: 0;
+
+  color: tomato;
+}
+
+/* CURSOR DA MÁQUINA DE ESCREVER */
+.cursor {
+  display: inline-block;
+  margin-left: 3px;
+
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
   }
-  
-  /* Conteúdo do Header */
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.header-contents p {
+  font-size: 17px;
+  line-height: 1.7;
+
+  color: #555;
+
+  margin: 0;
+}
+
+.header-contents button {
+  border: none;
+
+  background: tomato;
+  color: white;
+
+  padding: 14px 28px;
+
+  border-radius: 8px;
+
+  font-size: 16px;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.header-contents button:hover {
+  background: #e5533d;
+  transform: translateY(-2px);
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    padding: 30px 5%;
+    gap: 30px;
+  }
+
+  .header-image,
   .header-contents {
-    /* Fundo transparente para melhor contraste com o texto */
-    padding: 30px;
-    border-radius: 10px;
-    max-width: 700px;
     width: 100%;
-    animation: fadeIn 3s;
   }
-  
-  /* Estilizando o título */
+
+  .header-image {
+    height: 300px;
+  }
+
   .header-contents h2 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    font-weight: bold;
+    font-size: 32px;
   }
-  
-  /* Estilizando o parágrafo */
-  .header-contents p {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-    line-height: 1.6;
-  }
-  
-  /* Estilizando o botão */
-  .header-button {
-    background-color: #ff6347;
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    font-size: 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .header-button:hover {
-    background-color: #ff4500;
-  }
-  
-button {
+}
 
-    border: none;
-    color: white;
-font-weight: 500;
-background-color: tomato;
-font-size: (1vw,13px);
-border-radius: 50px;
-padding: 30px;
-cursor: pointer;
+.cursor {
+  display: inline-block;
+  margin-left: 3px;
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
   }
 
-  /* Responsividade */
-  @media (max-width: 768px) {
-    .header-contents h2 {
-      font-size: 2rem;
-    }
-  
-    .header-contents p {
-      font-size: 1rem;
-    }
-  
-    .header-button {
-      padding: 12px 25px;
-      font-size: 0.9rem;
-    }
+  50% {
+    opacity: 0;
   }
-  
-  @media (max-width: 480px) {
-    .header-contents {
-      padding: 20px;
-    }
-  
-    .header-contents h2 {
-      font-size: 1.5rem;
-    }
-  
-    .header-contents p {
-      font-size: 0.9rem;
-    }
+
+  100% {
+    opacity: 1;
   }
-  
+}

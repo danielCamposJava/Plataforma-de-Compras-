@@ -1,480 +1,393 @@
+
+/* =========================================
+   CONTAINER PRINCIPAL
+========================================= */
+
 .product-details {
+  width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: 'Arial', sans-serif;
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  line-height: 1.6; /* Melhorar a legibilidade */
+  margin: 50px auto;
+  padding: 30px;
+  box-sizing: border-box;
 }
 
-h1 {
-  font-size: 32px;
-  color: tomato;
-  margin-bottom: 20px;
-  text-align: left;
+
+/* =========================================
+   CARD DO PRODUTO
+========================================= */
+
+.product-card {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 70px;
+
+  padding: 40px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border-radius: 15px;
+
+  /* SOMBRA TOMATE */
+  box-shadow:
+    0 10px 30px rgba(255, 99, 71, 0.25);
+
+  /* BORDA TOMATE */
+  border: 1px solid rgba(255, 99, 71, 0.25);
 }
 
-.product-header, .product-image-container, .product-info, .product-actions, .acompanhamentos-container {
-  margin-bottom: 30px;
-}
+
+/* =========================================
+   IMAGEM
+========================================= */
 
 .product-image-container {
+  width: 50%;
+
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
+  align-items: center;
 }
 
 .product-details-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out;
+  width: 100%;
+  max-width: 500px;
+
+  height: 420px;
+
+  object-fit: contain;
+
+  border-radius: 12px;
 }
 
-.product-details-image:hover {
-  transform: scale(1.05);
-}
+
+/* =========================================
+   INFORMAÇÕES
+========================================= */
 
 .product-info {
-  max-width: 800px;
+  width: 50%;
+}
+
+.product-info h1 {
+  font-size: 32px;
+
+  margin-bottom: 25px;
+
+  color: tomato;
 }
 
 .product-name {
-  font-size: 20px;
-  color: black;
+  font-size: 25px;
+
   font-weight: bold;
-  margin: 20px 0;
+
+  margin-bottom: 20px;
+
+  color: tomato;
 }
 
-.product-description, .product-category {
+.product-description {
+  font-size: 18px;
+
+  line-height: 1.7;
+
+  margin-bottom: 25px;
+
+  color: #555;
+}
+
+.product-category {
   font-size: 16px;
+
+  margin-bottom: 20px;
+
   color: #666;
-  margin: 20px 0;
 }
 
 .product-price {
-  font-size: 24px;
+  font-size: 23px;
+
+  margin-top: 20px;
+
   color: tomato;
-  font-weight: bold;
 }
 
-.product-actions {
+
+/* =========================================
+   BOTÃO TOMATO
+========================================= */
+
+.product-button-container {
+  width: 100%;
+
   display: flex;
+
   justify-content: flex-start;
-  gap: 15px;
+
+  margin-top: 35px;
 }
 
-.add-to-cart, .buy-now {
-  padding: 12px 20px;
-  font-size: 16px;
+.add-to-cart-button {
   border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
 
-.add-to-cart {
-  background-color: #ff6f00;
-  color: white;
-}
+  padding: 15px 40px;
 
-.add-to-cart:hover {
-  background-color: #e65c00;
-}
-
-.buy-now {
-  background-color: #d32f2f;
-  color: white;
-}
-
-.buy-now:hover {
-  background-color: #c62828;
-}
-
-/* Main container for each cardapio section */
-.acompanhamentos-container {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  padding: 20px 0;
-  width: 100%;
-  height: auto;
-}
-
-/* Container for each item in the menu */
-.explore-menu-list-coca {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  background-color: #f9f9f9;
-  transition: background-color 0.3s ease;
-}
-
-.explore-menu-list-coca:hover {
-  background-color: #f1f1f1;
-}
-
-/* Title style for each category */
-.title-cardapio {
-  background-color: white;
-  border: 1px solid tomato;
-  color: tomato;
-  padding: 15px;
-  width: 190px;
-  margin: 50px auto;
-  border-radius: 15px;
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-/* Image styles */
-.acompanhamento-image {
-  max-width: 50px;
-  height: auto;
-  border-radius: 30px;
-  object-fit: cover;
-}
-
-/* Product name style */
-.product-name {
-  font-size: 16px;
-  margin: 0 10px;
-  font-weight: normal;
-  flex: 3;
-}
-
-/* Price style */
-.preco {
-  font-size: 16px;
-  color: tomato;
-  font-weight: bold;
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-}
-
-/* Styling the select field */
-.select-field {
-  width: 120px;
-  padding: 10px;
-  border-radius: 15px;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  margin-top: 15px;
-  transition: border-color 0.3s ease;
-}
-
-/* Focus effect on select */
-.select-field:focus {
-  border-color: tomato;
-}
-
-/* Checkbox styling */
-input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: #f0f0f0;
-  border: 2px solid #ccc;
-  transition: all 0.3s ease;
-  margin-right: 10px;
-  cursor: pointer;
-}
-
-/* Checkbox checked state */
-input[type="checkbox"]:checked {
-  background-color: #4CAF50;
-  border-color: #4CAF50;
-}
-
-/* Checkbox checked icon */
-input[type="checkbox"]:checked::before {
-  content: "✔";
-  font-size: 18px;
-  color: white;
-  position: absolute;
-  top: 2px;
-  left: 5px;
-}
-
-/* Checkbox focus state */
-input[type="checkbox"]:focus {
-  outline: none;
-  box-shadow: 0 0 5px tomato;
-}
-
-/* Checkbox hover state */
-input[type="checkbox"]:hover {
-  background-color: #e0e0e0;
-}
-
-/* Modal styles */
-/* Modal Background */
-.custom-alert-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-/* Modal Content */
-.modal-content {
-  background-color: white;
   border-radius: 8px;
-  padding: 20px;
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  animation: modalFadeIn 0.3s ease-in-out;
-}
 
-/* Close Button */
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 24px;
+  font-size: 18px;
+
+  font-weight: bold;
+
   cursor: pointer;
-  color: #888;
-  transition: color 0.3s ease;
-}
 
-.close-btn:hover {
-  color: #333;
-}
+  /* TOMATO */
+  background: tomato;
 
-/* Heading Style */
-.modal-content h2 {
-  margin: 0 0 10px;
-  font-size: 20px;
-  color: #333;
-}
-
-/* Paragraph Style */
-.modal-content p {
-  font-size: 16px;
-  color: #555;
-  margin: 20px 0;
-}
-
-/* Button Style */
-.modal-close {
-  background-color: #007bff;
   color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+
+  /* SOMBRA TOMATO */
+  box-shadow:
+    0 6px 15px rgba(255, 99, 71, 0.35);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
 }
 
-.modal-close:hover {
-  background-color: #0056b3;
+
+/* =========================================
+   HOVER
+========================================= */
+
+.add-to-cart-button:hover {
+  transform: translateY(-3px);
+
+  /* TOMATO MAIS ESCURO */
+  background: #e5533d;
+
+  box-shadow:
+    0 10px 25px rgba(255, 99, 71, 0.45);
 }
 
-/* Animation for Modal */
-@keyframes modalFadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+
+/* =========================================
+   CLICK
+========================================= */
+
+.add-to-cart-button:active {
+  transform: translateY(0);
+
+  box-shadow:
+    0 4px 10px rgba(255, 99, 71, 0.3);
 }
 
-/* Responsive Styles for Small Devices */
-@media (max-width: 768px) {
-  .modal-content {
-    width: 85%;
-    padding: 15px;
-  }
 
-  .modal-content h2 {
-    font-size: 18px;
-  }
+/* =========================================
+   LOADING
+========================================= */
 
-  .modal-content p {
-    font-size: 14px;
-  }
+.loading-container {
+  width: 100%;
 
-  .modal-close {
-    font-size: 14px;
-    padding: 8px 16px;
-  }
+  display: flex;
 
-  .close-btn {
-    font-size: 20px;
-  }
+  justify-content: center;
+
+  align-items: center;
+
+  padding: 100px 20px;
+
+  color: tomato;
 }
 
-@media (max-width: 480px) {
-  .modal-content {
-    width: 95%;
-    padding: 10px;
-  }
 
-  .modal-content h2 {
-    font-size: 16px;
-  }
+/* =========================================
+   ERRO
+========================================= */
 
-  .modal-content p {
-    font-size: 12px;
-  }
+.error-container {
+  width: 100%;
 
-  .modal-close {
-    font-size: 12px;
-    padding: 6px 12px;
-  }
+  display: flex;
 
-  .close-btn {
-    font-size: 18px;
-  }
+  justify-content: center;
+
+  align-items: center;
+
+  padding: 100px 20px;
+
+  color: tomato;
 }
 
-/* Responsiveness for iPhone devices */
-@media only screen and (max-width: 768px) {
-  .product-details {
-    padding: 15px;
-  }
 
-  h1 {
-    font-size: 28px;
-  }
+/* =========================================
+   MODAL
+========================================= */
 
-  .product-name {
-    font-size: 18px;
-  }
-
-  .product-description, .product-category {
-    font-size: 14px;
-  }
-
-  .product-price {
-    font-size: 22px;
-  }
-
-  .add-to-cart, .buy-now {
-    font-size: 14px;
-    padding: 10px 18px;
-  }
-
-  .acompanhamentos-container {
-    height: auto;
-    padding: 10px 0;
-  }
-
-  .explore-menu-list-coca {
-    flex-direction: column;
-    padding: 15px;
-    height: auto;
-  }
-
-  .title-cardapio {
-    font-size: 16px;
-    width: 100%;
-  }
-
-  .select-field {
-    width: 100%;
-    padding: 8px;
-  }
-
-  .acompanhamento-image {
-    max-width: 40px;
-  }
-}
-
-@media only screen and (max-width: 480px) {
-  h1 {
-    font-size: 24px;
-  }
-
-  .product-name {
-    font-size: 16px;
-  }
-
-  .product-description, .product-category {
-    font-size: 12px;
-  }
-
-  .product-price {
-    font-size: 20px;
-  }
-
-  .add-to-cart, .buy-now {
-    font-size: 12px;
-    padding: 8px 16px;
-  }
-
-  .acompanhamentos-container {
-    height: auto;
-    padding: 10px 0;
-  }
-
-  .explore-menu-list-coca {
-    flex-direction: column;
-    padding: 15px;
-    height: auto;
-  }
-
-  .title-cardapio {
-    font-size: 14px;
-    width: 100%;
-  }
-
-  .select-field {
-    width: 100%;
-    padding: 8px;
-  }
-
-  .acompanhamento-image {
-    max-width: 30px;
-  }
-}
 .modal {
   position: fixed;
+
   top: 0;
   left: 0;
+
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+
   display: flex;
+
   justify-content: center;
   align-items: center;
+
+  background: rgba(255, 99, 71, 0.35);
+
+  z-index: 999;
 }
 
 .modal-content {
+  width: 90%;
+
+  max-width: 450px;
+
   background: white;
-  padding: 20px;
-  border-radius: 5px;
-  width: 300px;
+
+  padding: 30px;
+
+  border-radius: 15px;
+
   text-align: center;
+
+  box-shadow:
+    0 15px 40px rgba(255, 99, 71, 0.35);
+
+  border: 1px solid rgba(255, 99, 71, 0.25);
 }
 
-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: tomato;
-  color: white;
+.modal-content h2 {
+  color: tomato;
+}
+
+.modal-image {
+  width: 180px;
+  height: 180px;
+
+  object-fit: contain;
+
+  margin: 20px auto;
+}
+
+.modal-buttons {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 15px;
+
+  margin-top: 25px;
+}
+
+.modal-buttons button {
+  padding: 12px 20px;
+
   border: none;
-  border-radius: 5px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  background: tomato;
+
+  color: white;
+
+  box-shadow:
+    0 4px 10px rgba(255, 99, 71, 0.25);
+
+  transition: 0.3s ease;
+}
+
+.modal-buttons button:hover {
+  background: #e5533d;
+
+  transform: translateY(-2px);
+}
+
+
+/* =========================================
+   RESPONSIVO
+========================================= */
+
+@media (max-width: 800px) {
+
+  .product-card {
+    flex-direction: column;
+
+    gap: 30px;
+
+    padding: 25px;
+  }
+
+  .product-image-container {
+    width: 100%;
+  }
+
+  .product-details-image {
+    height: 350px;
+  }
+
+  .product-info {
+    width: 100%;
+
+    text-align: center;
+  }
+
+  .product-button-container {
+    justify-content: center;
+  }
+}
+
+
+/* =========================================
+   CELULAR
+========================================= */
+
+@media (max-width: 500px) {
+
+  .product-details {
+    padding: 15px;
+
+    margin: 20px auto;
+  }
+
+  .product-card {
+    padding: 20px;
+  }
+
+  .product-details-image {
+    height: 280px;
+  }
+
+  .product-info h1 {
+    font-size: 26px;
+  }
+
+  .product-name {
+    font-size: 21px;
+  }
+
+  .product-description {
+    font-size: 16px;
+  }
+
+  .add-to-cart-button {
+    width: 100%;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+  }
 }
