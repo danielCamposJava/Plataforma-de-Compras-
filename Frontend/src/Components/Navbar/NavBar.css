@@ -1,254 +1,983 @@
-/* NAVBAR BASE */
+/* =========================================================
+   NAVBAR
+========================================================= */
+
 .navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px 30px;
-  background-color: tomato;
-  position: relative;
-  margin-bottom: 50px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  z-index: 20;
-  border-radius: 30px
-}
-.navbar-user {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+    width: 100%;
+    min-height: 70px;
+
+    padding: 8px 4%;
+
+    display: flex;
+    align-items: center;
+
+    background: #ffffff;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 1000;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 2px 12px rgba(0, 0, 0, 0.08);
+
+    gap: 25px;
 }
 
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background-color: #f8f8f8;
-  padding: 6px 12px;
-  border-radius: 20px;
-}
 
-.user-name {
-  font-weight: 500;
-  font-size: 14px;
-  color: #333;
-}
-.navbar-user {
-  display: flex;
-  align-items: center;
-  margin-left: 10px;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  background-color: #f1f1f1;
-  padding: 6px 12px;
-  border-radius: 20px;
-  gap: 8px;
-}
-
-.user-name {
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
-}
-
-.user-status {
-  width: 10px;
-  height: 10px;
-  background-color: limegreen;
-  border-radius: 50%;
-}
-
-.user-status {
-  width: 10px;
-  height: 10px;
-  background-color: limegreen;
-  border-radius: 50%;
-}
-
+/* =========================================================
+   LOGO
+========================================================= */
 
 .logo {
-  cursor: pointer;
-  width: 80px;
-  height: 80px;
-  border-radius: 30px;
+    height: 55px;
+    width: auto;
+
+    max-width: 120px;
+
+    object-fit: contain;
+
+    cursor: pointer;
+
+    flex-shrink: 0;
+
+    transition: transform 0.2s ease;
 }
 
-.carrinho {
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  margin-right: 20px;
-  transition: transform 0.3s;
+.logo:hover {
+    transform: scale(1.03);
 }
 
-.carrinho:hover {
-  transform: scale(1.1);
+
+/* =========================================================
+   PESQUISA
+========================================================= */
+
+
+.navbar-search {
+    flex: 1;
+    width: 100%;
+    max-width: 650px;
+
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+
+    margin: 0 auto;
+
+    box-sizing: border-box;
 }
 
-.menu-icon svg,
-.menu-close svg,
-.navbar-search-icon svg {
-  color: white; 
-  transition: transform 0.2s ease;
-  cursor: pointer;
+/* CAMPO DE PESQUISA */
+.navbar-search input {
+    flex: 1;
+
+    width: 100%;
+    height: 44px;
+
+    padding: 0 20px;
+
+    border: 1px solid #dddddd;
+    border-right: none;
+
+    border-radius: 24px 0 0 24px;
+
+    outline: none;
+
+    background: #f9f9f9;
+    color: #333;
+
+    font-size: 14px;
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
 }
 
-.menu-icon svg:hover,
-.menu-close svg:hover,
-.navbar-search-icon svg:hover {
-  color: whitesmoke;
-  transform: scale(1.1);
+.navbar-search input:focus {
+    border-color: tomato;
+    background: #ffffff;
 }
 
-.navbar-button {
-  padding: 8px 16px;
-  background-color: tomato;
-  color: white;
-  border: none;
-  border-radius: 15px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 500;
-  transition: all 0.3s ease;
+.navbar-search input::placeholder {
+    color: #999999;
 }
 
-.navbar-button:hover {
-  background-color: white;
-  color: tomato;
-  border: 1px solid tomato;
+/* BOTÃO DA LUPA */
+.navbar-search button {
+    flex: 0 0 52px;
+
+    width: 52px;
+    min-width: 52px;
+    max-width: 52px;
+
+    height: 44px;
+    min-height: 44px;
+    max-height: 44px;
+
+    padding: 0;
+    margin: 0;
+
+    border: 1px solid tomato;
+    border-left: none;
+
+    border-radius: 0 24px 24px 0;
+
+    background: tomato;
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
 }
 
-/* MENU DESKTOP */
-.navbar-menu {
-  list-style: none;
-  display: flex;
-  margin: 0;
-  padding: 0;
-  gap: 20px;
+.navbar-search button:hover {
+    background: #e64a19;
 }
 
-.navbar-menu li {
-  padding: 10px 15px;
-  cursor: pointer;
-  font-size: 17px;
-  font-weight: 500;
-  color: white;
-  transition: color 0.3s;
+.navbar-search button svg {
+    font-size: 18px;
 }
 
-.navbar-menu li:hover,
-.navbar-menu li.active {
-  color:white;
-}
+/* =========================================================
+   LADO DIREITO
+========================================================= */
 
-/* RIGHT SECTION */
 .navbar-right {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+
+    flex-shrink: 0;
 }
 
-/* ICON MENU HAMBURGUER */
-.menu-icon {
-  display: none;
-  cursor: pointer;
+
+/* =========================================================
+   CARRINHO
+========================================================= */
+
+.navbar-cart {
+    position: relative;
+
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    border-radius: 50%;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
 }
 
-.menu-icon img {
-  width: 30px;
-  height: 30px;
+.navbar-cart:hover {
+    background: #f5f5f5;
+
+    transform: scale(1.04);
 }
 
-/* ÍCONE DE FECHAR */
-.menu-close {
-  display: none;
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  cursor: pointer;
-  z-index: 15;
+.cart-icon {
+    font-size: 21px;
+
+    color: #333333;
 }
 
-.menu-close img {
-  width: 30px;
-  height: 30px;
+.navbar-cart:hover .cart-icon {
+    color: tomato;
 }
 
-/* TABLETS */
-@media (max-width: 1024px) {
-  .navbar-menu {
-    gap: 16px;
-  }
 
-  .navbar-right {
+.cart-dot {
+    position: absolute;
+
+    top: 6px;
+    right: 5px;
+
+    width: 9px;
+    height: 9px;
+
+    background: tomato;
+
+    border: 2px solid #ffffff;
+
+    border-radius: 50%;
+}
+
+
+/* =========================================================
+   USUÁRIO
+========================================================= */
+
+.navbar-user {
+    display: flex;
+    align-items: center;
+
     gap: 12px;
-  }
 }
 
-/* SMARTPHONES */
-@media (max-width: 768px) {
-  .menu-icon {
-    display: block;
-  }
+.user-info {
+    display: flex;
+    align-items: center;
 
-  .navbar-menu {
-    display: none;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 0;
+    gap: 7px;
+}
+
+.user-name {
+    max-width: 100px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    color: #333333;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.user-status {
+    width: 9px;
+    height: 9px;
+
+    background: #00c853;
+
+    border-radius: 50%;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   BOTÕES
+========================================================= */
+
+.navbar-button,
+.logout-btn {
+    border: none;
+
+    background: tomato;
+
+    color: #ffffff;
+
+    padding: 10px 18px;
+
+    border-radius: 24px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.navbar-button:hover,
+.logout-btn:hover {
+    background: #e64a19;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 4px 10px rgba(255, 99, 71, 0.22);
+}
+
+
+/* =========================================================
+   RESULTADOS DA PESQUISA
+========================================================= */
+
+.search-results {
+    width: 100%;
+
+    background: #f7f7f7;
+
+    border-bottom: 1px solid #eeeeee;
+
+    position: relative;
+
+    z-index: 900;
+}
+
+.search-results-container {
+    width: 100%;
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+    padding: 22px 4% 30px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   CABEÇALHO DOS RESULTADOS
+========================================================= */
+
+.search-results-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+}
+
+.search-results-header h3 {
+    margin: 0;
+
+    color: #222222;
+
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.search-results-header h3 strong {
+    font-weight: 700;
+}
+
+.search-results-header span {
+    color: #777777;
+
+    font-size: 13px;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   GRID DE PRODUTOS
+========================================================= */
+
+.search-products-grid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(190px, 1fr));
+
+    gap: 16px;
+}
+
+
+/* =========================================================
+   CARD DO PRODUTO
+========================================================= */
+
+.search-product-card {
+    min-width: 0;
+
+    background: #ffffff;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    border: 1px solid #eeeeee;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.search-product-card:hover {
+    transform: translateY(-3px);
+
+    border-color: #dddddd;
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.09);
+}
+
+
+/* =========================================================
+   IMAGEM
+========================================================= */
+
+.search-product-image {
+    width: 100%;
+
+    height: 190px;
+
+    background: #f5f5f5;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+.search-product-image img {
     width: 100%;
     height: 100%;
-    padding: 80px 30px 30px;
-    background-color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    z-index: 10;
-    overflow-y: auto;
-    text-align: center;
-  }
 
-  .navbar-menu.active {
-    display: flex;
-  }
+    object-fit: cover;
 
-  .navbar-menu li {
-    font-size: 22px;
-    padding: 18px 0;
-    color: black;
-    transition: background-color 0.2s;
-  }
-
-  .navbar-menu li:hover {
-    background-color: rgba(0, 0, 0, 0.04);
-  }
-
-  .navbar-right {
-    display: none;
-  }
-
-  .menu-close {
     display: block;
-  }
+
+    transition: transform 0.25s ease;
 }
 
-/* TELEFONES MENORES */
+.search-product-card:hover
+.search-product-image img {
+    transform: scale(1.04);
+}
+
+
+/* =========================================================
+   INFORMAÇÕES
+========================================================= */
+
+.search-product-info {
+    padding: 14px;
+}
+
+.search-product-info h4 {
+    margin: 0 0 7px;
+
+    color: #222222;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    line-height: 1.3;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+.search-product-info p {
+    margin: 0 0 12px;
+
+    color: #777777;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   PREÇO
+========================================================= */
+
+.search-product-bottom {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 8px;
+}
+
+.search-product-price {
+    color: tomato;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.view-product {
+    color: #777777;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   NENHUM RESULTADO
+========================================================= */
+
+.no-search-results {
+    min-height: 180px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border-radius: 12px;
+
+    padding: 30px;
+}
+
+.no-search-results svg {
+    color: #bbbbbb;
+
+    font-size: 25px;
+
+    margin-bottom: 10px;
+}
+
+.no-search-results h4 {
+    margin: 0 0 6px;
+
+    color: #444444;
+
+    font-size: 16px;
+}
+
+.no-search-results p {
+    margin: 0;
+
+    color: #888888;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   MENU MOBILE
+========================================================= */
+
+.menu-icon {
+    display: none;
+
+    width: 40px;
+    height: 40px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #333333;
+
+    cursor: pointer;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+}
+
+.menu-icon:hover {
+    color: tomato;
+}
+
+
+.mobile-menu {
+    position: fixed;
+
+    top: 70px;
+    right: -100%;
+
+    width: 280px;
+    height: calc(100vh - 70px);
+
+    padding: 25px 20px;
+
+    background: #ffffff;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        -5px 0 20px rgba(0, 0, 0, 0.12);
+
+    transition: right 0.3s ease;
+
+    z-index: 998;
+}
+
+.mobile-menu.active {
+    right: 0;
+}
+
+.mobile-menu button {
+    width: 100%;
+
+    min-height: 48px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #f5f5f5;
+
+    color: #333333;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.mobile-menu button:hover {
+    background: tomato;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .navbar {
+        gap: 15px;
+
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .logo {
+        height: 52px;
+
+        max-width: 105px;
+    }
+
+    .navbar-search {
+        max-width: none;
+
+        margin: 0 10px;
+    }
+
+    .navbar-right {
+        gap: 10px;
+    }
+
+    .user-name {
+        max-width: 70px;
+    }
+
+    .navbar-button,
+    .logout-btn {
+        padding: 9px 14px;
+    }
+
+    .search-results-container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+
+/* =========================================================
+   TABLET PEQUENO / MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .navbar {
+        height: 64px;
+
+        min-height: 64px;
+
+        padding: 7px 16px;
+
+        gap: 10px;
+    }
+
+    .logo {
+        height: 50px;
+
+        max-width: 105px;
+    }
+
+    .navbar-search {
+        display: flex;
+
+        margin: 0;
+
+        height: 40px;
+    }
+
+    .navbar-search input {
+        font-size: 13px;
+
+        padding: 0 13px;
+    }
+
+    .navbar-search button {
+        width: 45px;
+        min-width: 45px;
+    }
+
+    .navbar-user,
+    .navbar-button {
+        display: none;
+    }
+
+    .navbar-right {
+        gap: 5px;
+    }
+
+    .navbar-cart {
+        width: 38px;
+        height: 38px;
+    }
+
+    .menu-icon {
+        display: flex;
+    }
+
+    .mobile-menu {
+        top: 64px;
+
+        height: calc(100vh - 64px);
+    }
+
+    .search-results-container {
+        padding: 18px 16px 25px;
+    }
+
+    .search-products-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 12px;
+    }
+
+    .search-product-image {
+        height: 170px;
+    }
+
+    .search-product-info {
+        padding: 11px;
+    }
+
+    .search-product-price {
+        font-size: 15px;
+    }
+
+    .view-product {
+        display: none;
+    }
+}
+
+
+/* =========================================================
+   CELULAR
+========================================================= */
+
 @media (max-width: 480px) {
-  .navbar {
-    padding: 10px 15px;
-  }
 
-  .logo {
-    width: 60px;
-    height: 60px;
-  }
+    .navbar {
+        height: 60px;
 
-  .navbar-menu li {
-    font-size: 18px;
-    padding: 14px 0;
-  }
+        min-height: 60px;
 
-  .navbar-button {
-    font-size: 14px;
-    padding: 8px 14px;
-  }
+        padding: 6px 12px;
+    }
+
+    .logo {
+        height: 46px;
+
+        max-width: 85px;
+    }
+
+    .navbar-search {
+        height: 38px;
+    }
+
+    .navbar-search input {
+        min-width: 0;
+
+        font-size: 12px;
+
+        padding: 0 11px;
+    }
+
+    .navbar-search button {
+        width: 40px;
+        min-width: 40px;
+
+        font-size: 13px;
+    }
+
+    .cart-icon {
+        font-size: 19px;
+    }
+
+    .navbar-cart {
+        width: 34px;
+        height: 34px;
+    }
+
+    .menu-icon {
+        width: 34px;
+        height: 34px;
+
+        font-size: 19px;
+    }
+
+    .mobile-menu {
+        top: 60px;
+
+        width: 100%;
+
+        height: calc(100vh - 60px);
+
+        padding: 20px 15px;
+    }
+
+    .search-results-container {
+        padding: 15px 12px 20px;
+    }
+
+    .search-results-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 5px;
+
+        margin-bottom: 15px;
+    }
+
+    .search-results-header h3 {
+        font-size: 15px;
+    }
+
+    .search-results-header span {
+        font-size: 12px;
+    }
+
+    .search-products-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
+    }
+
+    .search-product-image {
+        height: 145px;
+    }
+
+    .search-product-info {
+        padding: 10px;
+    }
+
+    .search-product-info h4 {
+        font-size: 13px;
+
+        margin-bottom: 5px;
+    }
+
+    .search-product-info p {
+        font-size: 11px;
+
+        margin-bottom: 8px;
+    }
+
+    .search-product-price {
+        font-size: 14px;
+    }
+}
+
+
+/* =========================================================
+   CELULARES MUITO PEQUENOS
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .navbar {
+        padding-left: 8px;
+        padding-right: 8px;
+
+        gap: 6px;
+    }
+
+    .logo {
+        height: 43px;
+
+        max-width: 70px;
+    }
+
+    .navbar-search input {
+        font-size: 11px;
+
+        padding: 0 9px;
+    }
+
+    .navbar-search button {
+        width: 36px;
+        min-width: 36px;
+    }
+
+    .navbar-cart {
+        width: 30px;
+    }
+
+    .menu-icon {
+        width: 30px;
+    }
+
+    .search-products-grid {
+        gap: 8px;
+    }
+
+    .search-product-image {
+        height: 125px;
+    }
+
+    .search-product-info {
+        padding: 8px;
+    }
+
+    .search-product-price {
+        font-size: 13px;
+    }
 }
