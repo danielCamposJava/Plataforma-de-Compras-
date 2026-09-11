@@ -1,5 +1,9 @@
 
-import { createContext, useEffect, useState } from "react";
+import {
+    createContext,
+    useEffect,
+    useState
+} from "react";
 
 // ============================================================
 // ACOMPANHAMENTOS
@@ -48,35 +52,156 @@ const StoreContextProvider = ({ children }) => {
     // ========================================================
 
     const [cartItems, setCartItems] = useState([]);
-
     const [foodList, setFoodList] = useState([]);
-
     const [categories, setCategories] = useState([]);
 
-    const [user, setUser] = useState(null);
+    // ========================================================
+    // USUÁRIO
+    // Recupera o usuário ao atualizar a página
+    // ========================================================
 
-    // Paginação
+    const [user, setUser] = useState(() => {
+
+        const storedUser =
+            localStorage.getItem("user");
+
+        if (storedUser) {
+
+            try {
+
+                const parsedUser =
+                    JSON.parse(storedUser);
+
+                if (parsedUser) {
+                    return parsedUser;
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao recuperar usuário:",
+                    error
+                );
+
+                localStorage.removeItem("user");
+            }
+        }
+
+        // Caso exista somente os dados separados
+        const userName =
+            localStorage.getItem("userName");
+
+        const userId =
+            localStorage.getItem("userId");
+
+        const userRole =
+            localStorage.getItem("userRole");
+
+        if (
+            userName ||
+            userId ||
+            userRole
+        ) {
+
+            return {
+                id: userId,
+                name: userName,
+                role: userRole
+            };
+        }
+
+        return null;
+    });
+
+    // ========================================================
+    // PAGINAÇÃO
+    // ========================================================
+
     const [page, setPage] = useState(0);
 
-    // ALTERADO: antes era 10
-    const [limit, setLimit] = useState(1000);
+    const [limit, setLimit] =
+        useState(1000);
 
-    const [totalCount, setTotalCount] = useState(0);
+    const [totalCount, setTotalCount] =
+        useState(0);
 
-    const [loadingProducts, setLoadingProducts] = useState(false);
+    const [loadingProducts, setLoadingProducts] =
+        useState(false);
 
-    const [loadingCategories, setLoadingCategories] = useState(false);
+    const [loadingCategories, setLoadingCategories] =
+        useState(false);
 
     // ========================================================
     // AUTENTICAÇÃO
     // ========================================================
 
     const login = (userData) => {
+
+        if (!userData) {
+
+            console.warn(
+                "Dados do usuário inválidos."
+            );
+
+            return;
+        }
+
+        // Atualiza o estado
         setUser(userData);
+
+        // Salva usuário completo
+        localStorage.setItem(
+            "user",
+            JSON.stringify(userData)
+        );
+
+        // Salva nome
+        if (userData.name) {
+
+            localStorage.setItem(
+                "userName",
+                userData.name
+            );
+        }
+
+        // Salva ID
+        const userId =
+            userData.id ??
+            userData._id;
+
+        if (userId) {
+
+            localStorage.setItem(
+                "userId",
+                String(userId)
+            );
+        }
+
+        // Salva role
+        if (userData.role) {
+
+            localStorage.setItem(
+                "userRole",
+                userData.role
+            );
+        }
     };
 
+    // ========================================================
+    // LOGOUT
+    // ========================================================
+
     const logout = () => {
+
         setUser(null);
+
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        localStorage.removeItem("userName");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userRole");
+        localStorage.removeItem("storedEmail");
+        localStorage.removeItem("storedRememberMe");
     };
 
     // ========================================================
@@ -109,12 +234,14 @@ const StoreContextProvider = ({ children }) => {
                 "================================="
             );
 
-            const response = await fetch(url, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
+            const response =
+                await fetch(url, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+                    },
+                });
 
             console.log(
                 "Status da API:",
@@ -122,12 +249,14 @@ const StoreContextProvider = ({ children }) => {
             );
 
             if (!response.ok) {
+
                 throw new Error(
                     `Erro HTTP: ${response.status}`
                 );
             }
 
-            const result = await response.json();
+            const result =
+                await response.json();
 
             console.log(
                 "Resposta completa da API:",
@@ -151,7 +280,9 @@ const StoreContextProvider = ({ children }) => {
 
                 setFoodList(result);
 
-                setTotalCount(result.length);
+                setTotalCount(
+                    result.length
+                );
 
                 return result;
             }
@@ -180,7 +311,9 @@ const StoreContextProvider = ({ children }) => {
                     result.totalCount
                 );
 
-                setFoodList(result.data);
+                setFoodList(
+                    result.data
+                );
 
                 setTotalCount(
                     Number(result.totalCount) ||
@@ -200,7 +333,6 @@ const StoreContextProvider = ({ children }) => {
             );
 
             setFoodList([]);
-
             setTotalCount(0);
 
             return [];
@@ -213,7 +345,6 @@ const StoreContextProvider = ({ children }) => {
             );
 
             setFoodList([]);
-
             setTotalCount(0);
 
             return [];
@@ -234,17 +365,20 @@ const StoreContextProvider = ({ children }) => {
 
             setLoadingCategories(true);
 
-            const response = await fetch(
-                "http://localhost:4000/category/get-category",
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            const response =
+                await fetch(
+                    "http://localhost:4000/category/get-category",
+                    {
+                        method: "GET",
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+                        },
+                    }
+                );
 
             if (!response.ok) {
+
                 throw new Error(
                     `Erro HTTP: ${response.status}`
                 );
@@ -260,7 +394,9 @@ const StoreContextProvider = ({ children }) => {
 
             if (
                 result &&
-                Array.isArray(result.categories)
+                Array.isArray(
+                    result.categories
+                )
             ) {
 
                 setCategories(
@@ -304,9 +440,7 @@ const StoreContextProvider = ({ children }) => {
 
     useEffect(() => {
 
-        // ALTERADO: busca até 1000 produtos
         fetchFoodList(0, 1000);
-
         fetchCategories();
 
     }, []);
@@ -321,7 +455,10 @@ const StoreContextProvider = ({ children }) => {
             return;
         }
 
-        fetchFoodList(page, limit);
+        fetchFoodList(
+            page,
+            limit
+        );
 
     }, [page, limit]);
 
@@ -329,13 +466,14 @@ const StoreContextProvider = ({ children }) => {
     // ATUALIZAR PRODUTOS
     // ========================================================
 
-    const refreshFoodList = async () => {
+    const refreshFoodList =
+        async () => {
 
-        await fetchFoodList(
-            page,
-            limit
-        );
-    };
+            await fetchFoodList(
+                page,
+                limit
+            );
+        };
 
     // ========================================================
     // ADICIONAR AO CARRINHO
@@ -385,17 +523,19 @@ const StoreContextProvider = ({ children }) => {
         }
 
         const existingItemIndex =
-            cartItems.findIndex((item) => {
+            cartItems.findIndex(
+                (item) => {
 
-                const existingId =
-                    item.product?.id ??
-                    item.product?._id;
+                    const existingId =
+                        item.product?.id ??
+                        item.product?._id;
 
-                return (
-                    String(existingId) ===
-                    String(productId)
-                );
-            });
+                    return (
+                        String(existingId) ===
+                        String(productId)
+                    );
+                }
+            );
 
         // ====================================================
         // PRODUTO EXISTENTE
@@ -403,30 +543,32 @@ const StoreContextProvider = ({ children }) => {
 
         if (existingItemIndex !== -1) {
 
-            setCartItems((previousItems) => {
+            setCartItems(
+                (previousItems) => {
 
-                const updatedItems =
-                    [...previousItems];
+                    const updatedItems =
+                        [...previousItems];
 
-                updatedItems[
-                    existingItemIndex
-                ] = {
-
-                    ...updatedItems[
+                    updatedItems[
                         existingItemIndex
-                    ],
+                    ] = {
 
-                    quantity:
-                        updatedItems[
+                        ...updatedItems[
                             existingItemIndex
-                        ].quantity + 1,
+                        ],
 
-                    acompanhamentos:
-                        cartItem.extras || [],
-                };
+                        quantity:
+                            updatedItems[
+                                existingItemIndex
+                            ].quantity + 1,
 
-                return updatedItems;
-            });
+                        acompanhamentos:
+                            cartItem.extras || [],
+                    };
+
+                    return updatedItems;
+                }
+            );
 
             return;
         }
@@ -435,64 +577,68 @@ const StoreContextProvider = ({ children }) => {
         // NOVO PRODUTO
         // ====================================================
 
-        setCartItems((previousItems) => [
+        setCartItems(
+            (previousItems) => [
 
-            ...previousItems,
+                ...previousItems,
 
-            {
+                {
+                    product: {
 
-                product: {
+                        ...cartItem,
 
-                    ...cartItem,
+                        id: productId,
 
-                    id: productId,
+                        _id: productId,
 
-                    _id: productId,
+                        price: productPrice,
+                    },
 
-                    price: productPrice,
+                    quantity: 1,
+
+                    acompanhamentos:
+                        cartItem.extras || [],
                 },
-
-                quantity: 1,
-
-                acompanhamentos:
-                    cartItem.extras || [],
-            },
-        ]);
+            ]
+        );
     };
 
     // ========================================================
     // REMOVER DO CARRINHO
     // ========================================================
 
-    const removeFromCart = (productId) => {
+    const removeFromCart =
+        (productId) => {
 
-        if (!productId) {
+            if (!productId) {
 
-            console.warn(
-                "productId inválido:",
-                productId
-            );
+                console.warn(
+                    "productId inválido:",
+                    productId
+                );
 
-            return;
-        }
+                return;
+            }
 
-        setCartItems((previousItems) => {
+            setCartItems(
+                (previousItems) => {
 
-            return previousItems.filter(
-                (item) => {
+                    return previousItems.filter(
+                        (item) => {
 
-                    const itemId =
-                        item.product?.id ??
-                        item.product?._id;
+                            const itemId =
+                                item.product?.id ??
+                                item.product?._id;
 
-                    return (
-                        String(itemId) !==
-                        String(productId)
+                            return (
+                                String(itemId) !==
+                                String(productId)
+                            );
+                        }
                     );
                 }
             );
-        });
-    };
+        };
 
     // ========================================================
     // LIMPAR CARRINHO
@@ -507,33 +653,38 @@ const StoreContextProvider = ({ children }) => {
     // PREÇO DO ACOMPANHAMENTO
     // ========================================================
 
-    const getAcompanhamentoPrice = (acomp) => {
+    const getAcompanhamentoPrice =
+        (acomp) => {
 
-        if (!acomp || !acomp.name) {
-            return 0;
-        }
+            if (
+                !acomp ||
+                !acomp.name
+            ) {
+                return 0;
+            }
 
-        const allAcompanhamentos = [
+            const allAcompanhamentos = [
 
-            ...acompanhamento_principal,
+                ...acompanhamento_principal,
 
-            ...acompanhamento_refri,
+                ...acompanhamento_refri,
 
-            ...acompanhamento_arroz,
+                ...acompanhamento_arroz,
 
-            ...acompanhamento_batata,
-        ];
+                ...acompanhamento_batata,
+            ];
 
-        const selectedAcompanhamento =
-            allAcompanhamentos.find(
-                (item) =>
-                    item.name === acomp.name
-            );
+            const selectedAcompanhamento =
+                allAcompanhamentos.find(
+                    (item) =>
+                        item.name ===
+                        acomp.name
+                );
 
-        return selectedAcompanhamento
-            ? selectedAcompanhamento.preco
-            : 0;
-    };
+            return selectedAcompanhamento
+                ? selectedAcompanhamento.preco
+                : 0;
+        };
 
     // ========================================================
     // TOTAL DO CARRINHO
@@ -543,39 +694,44 @@ const StoreContextProvider = ({ children }) => {
 
         let totalAmount = 0;
 
-        cartItems.forEach((item) => {
+        cartItems.forEach(
+            (item) => {
 
-            const productPrice =
-                Number(
-                    item.product?.price ??
-                    item.product?.preco ??
-                    0
+                const productPrice =
+                    Number(
+                        item.product?.price ??
+                        item.product?.preco ??
+                        0
+                    );
+
+                const quantity =
+                    Number(
+                        item.quantity
+                    ) || 0;
+
+                totalAmount +=
+                    productPrice *
+                    quantity;
+
+                item.acompanhamentos?.forEach(
+                    (acomp) => {
+
+                        const accompanimentPrice =
+                            Number(
+                                acomp.price ??
+                                acomp.preco ??
+                                getAcompanhamentoPrice(
+                                    acomp
+                                )
+                            ) || 0;
+
+                        totalAmount +=
+                            accompanimentPrice *
+                            quantity;
+                    }
                 );
-
-            const quantity =
-                Number(item.quantity) || 0;
-
-            totalAmount +=
-                productPrice * quantity;
-
-            item.acompanhamentos?.forEach(
-                (acomp) => {
-
-                    const accompanimentPrice =
-                        Number(
-                            acomp.price ??
-                            acomp.preco ??
-                            getAcompanhamentoPrice(
-                                acomp
-                            )
-                        ) || 0;
-
-                    totalAmount +=
-                        accompanimentPrice *
-                        quantity;
-                }
-            );
-        });
+            }
+        );
 
         return totalAmount;
     };
@@ -588,8 +744,14 @@ const StoreContextProvider = ({ children }) => {
 
         return cartItems.reduce(
             (total, item) =>
+
                 total +
-                (Number(item.quantity) || 0),
+                (
+                    Number(
+                        item.quantity
+                    ) || 0
+                ),
+
             0
         );
     };
