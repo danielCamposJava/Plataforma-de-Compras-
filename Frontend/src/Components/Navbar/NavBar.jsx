@@ -1,478 +1,496 @@
-import React, {
-    useState,
-    useContext,
-    useEffect
-} from "react";
-
+import React, { useState, useContext, useEffect } from "react";
 import "./NavBar.css";
-
 import { assets } from "../../assets/frontend_assets/assets";
-
 import { useNavigate } from "react-router-dom";
-
 import { StoreContext } from "../../Content/StoreContent";
-
 import {
-    FaBars,
-    FaTimes,
-    FaShoppingCart,
-    FaSearch
+  FaBars,
+  FaTimes,
+  FaShoppingCart,
+  FaSearch
 } from "react-icons/fa";
 
-
 const NavBar = ({ setShowLogin }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [search, setSearch] = useState("");
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const {
+    foodList,
+    getTotalCartAmount,
+    user,
+    setUser
+  } = useContext(StoreContext);
 
-    const {
-        foodList,
-        getTotalCartAmount,
-        user,
-        setUser
-    } = useContext(StoreContext);
+  // =========================================================
+  // PRODUTOS DA PESQUISA
+  // =========================================================
 
+  const filteredProducts = search.trim()
+    ? (foodList || []).filter((product) => {
+        const term = search.toLowerCase().trim();
 
-    /* =====================================================
-       PESQUISA
-    ===================================================== */
+        const name =
+          product.name?.toLowerCase() || "";
 
-    const filteredProducts = search.trim()
-        ? (foodList || []).filter((product) => {
+        const description =
+          product.description?.toLowerCase() || "";
 
-            const term = search.toLowerCase().trim();
+        const category =
+          typeof product.category === "string"
+            ? product.category.toLowerCase()
+            : product.category?.name?.toLowerCase() || "";
 
-            const name =
-                product.name?.toLowerCase() || "";
-
-            const description =
-                product.description?.toLowerCase() || "";
-
-            const category =
-                typeof product.category === "string"
-                    ? product.category.toLowerCase()
-                    : product.category?.name?.toLowerCase() || "";
-
-            return (
-                name.includes(term) ||
-                description.includes(term) ||
-                category.includes(term)
-            );
-        })
-        : [];
-
-
-    /* =====================================================
-       MENU
-    ===================================================== */
-
-    const toggleMenu = () => {
-        setIsMenuOpen(prev => !prev);
-    };
-
-
-    /* =====================================================
-       LOGOUT
-    ===================================================== */
-
-    const handleLogout = () => {
-
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        localStorage.removeItem("userName");
-        localStorage.removeItem("userId");
-        localStorage.removeItem("userRole");
-
-        setUser(null);
-
-        setIsMenuOpen(false);
-
-        navigate("/");
-    };
-
-
-    /* =====================================================
-       FECHAR MENU AO REDIMENSIONAR
-    ===================================================== */
-
-    useEffect(() => {
-
-        const handleResize = () => {
-
-            if (window.innerWidth > 768) {
-                setIsMenuOpen(false);
-            }
-        };
-
-        window.addEventListener(
-            "resize",
-            handleResize
+        return (
+          name.includes(term) ||
+          description.includes(term) ||
+          category.includes(term)
         );
+      })
+    : [];
 
-        return () => {
-            window.removeEventListener(
-                "resize",
-                handleResize
-            );
-        };
+  // =========================================================
+  // URL DA IMAGEM
+  // =========================================================
 
-    }, []);
+  const getImageUrl = (product) => {
+    const image =
+      product?.image ||
+      product?.imageUrl;
 
+    if (!image) {
+      return assets.default_image;
+    }
 
-    /* =====================================================
-       BLOQUEAR SCROLL NO MOBILE
-    ===================================================== */
+    // Se já vier uma URL completa
+    if (
+      image.startsWith("http://") ||
+      image.startsWith("https://")
+    ) {
+      return image;
+    }
 
-    useEffect(() => {
+    // Remove barras do início para evitar:
+    // http://localhost:4000//uploads/...
+    const cleanImage = image.replace(/^\/+/, "");
 
-        document.body.style.overflow =
-            isMenuOpen ? "hidden" : "auto";
+    return `http://localhost:4000/${cleanImage}`;
+  };
 
-        return () => {
-            document.body.style.overflow = "auto";
-        };
+  // =========================================================
+  // MENU
+  // =========================================================
 
-    }, [isMenuOpen]);
+  const toggleMenu = () => {
+    setIsMenuOpen((prev) => !prev);
+  };
 
+  // =========================================================
+  // FECHAR PESQUISA
+  // =========================================================
 
-    /* =====================================================
-       ABRIR PRODUTO
-    ===================================================== */
+  const closeSearch = () => {
+    setSearch("");
+  };
 
-    const handleProductClick = (product) => {
+  // =========================================================
+  // LOGOUT
+  // =========================================================
 
-        setSearch("");
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userRole");
 
+    setUser(null);
+    setIsMenuOpen(false);
+    setSearch("");
+
+    navigate("/");
+  };
+
+  // =========================================================
+  // LOGO
+  // =========================================================
+
+  const handleLogoClick = () => {
+    setSearch("");
+    setIsMenuOpen(false);
+
+    navigate("/");
+  };
+
+  // =========================================================
+  // RESIZE
+  // =========================================================
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
         setIsMenuOpen(false);
-
-        navigate(`/product/${product._id || product.id}`);
+      }
     };
 
+    window.addEventListener("resize", handleResize);
 
-    return (
-        <>
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  // =========================================================
+  // BLOQUEAR SCROLL DA PÁGINA
+  // ENQUANTO PESQUISA OU MENU ESTIVER ABERTO
+  // =========================================================
+
+  useEffect(() => {
+    const shouldLockScroll =
+      search.trim() || isMenuOpen;
+
+    document.body.style.overflow =
+      shouldLockScroll ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [search, isMenuOpen]);
+
+  // =========================================================
+  // CLIQUE NO PRODUTO
+  // =========================================================
+
+  const handleProductClick = (product) => {
+    const productId =
+      product?._id ||
+      product?.id;
+
+    if (!productId) {
+      return;
+    }
+
+    setSearch("");
+    setIsMenuOpen(false);
+
+    navigate(`/product/${productId}`);
+  };
+
+  // =========================================================
+  // ERRO NA IMAGEM
+  // =========================================================
+
+  const handleImageError = (event) => {
+    event.currentTarget.src =
+      assets.default_image;
+  };
+
+  return (
+    <>
+      {/* =====================================================
+          NAVBAR
+      ===================================================== */}
+
+      <header className="navbar">
+
+        {/* LOGO */}
+
+        <img
+          src={assets.logo}
+          alt="Logo"
+          className="logo"
+          onClick={handleLogoClick}
+        />
+
+        {/* =================================================
+            PESQUISA
+        ================================================= */}
+
+        <div className="navbar-search">
+
+          <input
+            type="text"
+            placeholder="Pesquisar produtos..."
+            value={search}
+            onChange={(event) =>
+              setSearch(event.target.value)
+            }
+          />
+
+          <button
+            type="button"
+            aria-label="Pesquisar"
+          >
+            <FaSearch />
+          </button>
+
+        </div>
+
+        {/* =================================================
+            DIREITA DA NAVBAR
+        ================================================= */}
+
+        <div className="navbar-right">
+
+          {/* CARRINHO */}
+
+          <div
+            className="navbar-cart"
+            onClick={() => {
+              setSearch("");
+              navigate("/cart");
+            }}
+          >
+            <FaShoppingCart className="cart-icon" />
+
+            {getTotalCartAmount() > 0 && (
+              <span className="cart-dot"></span>
+            )}
+          </div>
+
+          {/* USUÁRIO */}
+
+          {user ? (
+            <div className="navbar-user">
+
+              <div className="user-info">
+
+                <span className="user-name">
+                  {user.name?.split(" ")[0]}
+                </span>
+
+                <span
+                  className="user-status"
+                  title="Online"
+                ></span>
+
+              </div>
+
+              <button
+                className="logout-btn"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+
+            </div>
+          ) : (
+            <button
+              className="navbar-button"
+              onClick={() => {
+                setSearch("");
+                setShowLogin(true);
+              }}
+            >
+              Sign In
+            </button>
+          )}
+
+          {/* MENU MOBILE */}
+
+          <button
+            className="menu-icon"
+            onClick={toggleMenu}
+            aria-label="Abrir menu"
+          >
+            {isMenuOpen ? (
+              <FaTimes />
+            ) : (
+              <FaBars />
+            )}
+          </button>
+
+        </div>
+      </header>
+
+      {/* =====================================================
+          RESULTADOS DA PESQUISA
+          FICA POR CIMA DE TODA A PÁGINA
+      ===================================================== */}
+
+      {search.trim() && (
+        <section className="search-results">
+
+          <div className="search-results-container">
+
+            {/* CABEÇALHO */}
+
+            <div className="search-results-header">
+
+              <h3>
+                Resultados para:
+                <strong>
+                  {" "}
+                  "{search}"
+                </strong>
+              </h3>
+
+              <span>
+                {filteredProducts.length} produto
+                {filteredProducts.length !== 1
+                  ? "s"
+                  : ""}
+              </span>
+
+            </div>
+
             {/* =================================================
-                NAVBAR
+                PRODUTOS
             ================================================= */}
 
-            <header className="navbar">
+            {filteredProducts.length > 0 ? (
 
-                {/* LOGO */}
+              <div className="search-products-grid">
 
-                <img
-                    src={assets.logo}
-                    alt="Logo"
-                    className="logo"
-                    onClick={() => {
-                        setSearch("");
-                        navigate("/");
-                    }}
-                />
+                {filteredProducts.map((product) => (
 
+                  <article
+                    className="search-product-card"
+                    key={
+                      product._id ||
+                      product.id
+                    }
+                    onClick={() =>
+                      handleProductClick(product)
+                    }
+                  >
 
-                {/* =================================================
-                    PESQUISA
-                ================================================= */}
+                    {/* IMAGEM */}
 
-                <div className="navbar-search">
+                    <div className="search-product-image">
 
-                    <input
-                        type="text"
-                        placeholder="Pesquisar produtos..."
-                        value={search}
-                        onChange={(e) =>
-                            setSearch(e.target.value)
+                      <img
+                        src={getImageUrl(product)}
+                        alt={
+                          product.name ||
+                          "Produto"
                         }
-                    />
-
-                    <button
-                        type="button"
-                        aria-label="Pesquisar"
-                    >
-                        <FaSearch />
-                    </button>
-
-                </div>
-
-
-                {/* =================================================
-                    DIREITA
-                ================================================= */}
-
-                <div className="navbar-right">
-
-                    {/* CARRINHO */}
-
-                    <div
-                        className="navbar-cart"
-                        onClick={() =>
-                            navigate("/cart")
+                        onError={
+                          handleImageError
                         }
-                    >
-
-                        <FaShoppingCart
-                            className="cart-icon"
-                        />
-
-                        {getTotalCartAmount() > 0 && (
-                            <span className="cart-dot"></span>
-                        )}
+                      />
 
                     </div>
 
+                    {/* INFORMAÇÕES */}
 
-                    {/* USUÁRIO */}
+                    <div className="search-product-info">
 
-                    {user ? (
+                      <h4>
+                        {product.name}
+                      </h4>
 
-                        <div className="navbar-user">
+                      {product.description && (
+                        <p>
+                          {product.description}
+                        </p>
+                      )}
 
-                            <div className="user-info">
+                      <div className="search-product-bottom">
 
-                                <span className="user-name">
-                                    {user.name?.split(" ")[0]}
-                                </span>
+                        <span className="search-product-price">
+                          R${" "}
+                          {Number(
+                            product.price || 0
+                          ).toFixed(2)}
+                        </span>
 
-                                <span
-                                    className="user-status"
-                                    title="Online"
-                                ></span>
+                        <span className="view-product">
+                          Ver produto
+                        </span>
 
-                            </div>
-
-                            <button
-                                className="logout-btn"
-                                onClick={handleLogout}
-                            >
-                                Logout
-                            </button>
-
-                        </div>
-
-                    ) : (
-
-                        <button
-                            className="navbar-button"
-                            onClick={() =>
-                                setShowLogin(true)
-                            }
-                        >
-                            Sign In
-                        </button>
-
-                    )}
-
-
-                    {/* MENU MOBILE */}
-
-                    <button
-                        className="menu-icon"
-                        onClick={toggleMenu}
-                        aria-label="Abrir menu"
-                    >
-
-                        {isMenuOpen ? (
-                            <FaTimes />
-                        ) : (
-                            <FaBars />
-                        )}
-
-                    </button>
-
-                </div>
-
-            </header>
-
-
-            {/* =================================================
-                RESULTADOS DA PESQUISA
-            ================================================= */}
-
-            {search.trim() && (
-
-                <section className="search-results">
-
-                    <div className="search-results-container">
-
-                        <div className="search-results-header">
-
-                            <h3>
-                                Resultados para:
-                                <strong>
-                                    {" "}
-                                    "{search}"
-                                </strong>
-                            </h3>
-
-                            <span>
-                                {filteredProducts.length} produto
-                                {filteredProducts.length !== 1
-                                    ? "s"
-                                    : ""}
-                            </span>
-
-                        </div>
-
-
-                        {filteredProducts.length > 0 ? (
-
-                            <div className="search-products-grid">
-
-                                {filteredProducts.map(
-                                    (product) => (
-
-                                        <article
-                                            className="search-product-card"
-                                            key={
-                                                product._id ||
-                                                product.id
-                                            }
-                                            onClick={() =>
-                                                handleProductClick(
-                                                    product
-                                                )
-                                            }
-                                        >
-
-                                            <div className="search-product-image">
-
-                                                <img
-                                                    src={
-                                                        product.image ||
-                                                        product.imageUrl ||
-                                                        "/placeholder.png"
-                                                    }
-                                                    alt={
-                                                        product.name
-                                                    }
-                                                />
-
-                                            </div>
-
-
-                                            <div className="search-product-info">
-
-                                                <h4>
-                                                    {product.name}
-                                                </h4>
-
-                                                {product.description && (
-
-                                                    <p>
-                                                        {
-                                                            product.description
-                                                        }
-                                                    </p>
-
-                                                )}
-
-                                                <div className="search-product-bottom">
-
-                                                    <span className="search-product-price">
-                                                        R${" "}
-                                                        {Number(
-                                                            product.price || 0
-                                                        ).toFixed(2)}
-                                                    </span>
-
-                                                    <span className="view-product">
-                                                        Ver produto
-                                                    </span>
-
-                                                </div>
-
-                                            </div>
-
-                                        </article>
-
-                                    )
-                                )}
-
-                            </div>
-
-                        ) : (
-
-                            <div className="no-search-results">
-
-                                <FaSearch />
-
-                                <h4>
-                                    Nenhum produto encontrado
-                                </h4>
-
-                                <p>
-                                    Tente pesquisar por outro
-                                    nome, categoria ou produto.
-                                </p>
-
-                            </div>
-
-                        )}
+                      </div>
 
                     </div>
 
-                </section>
+                  </article>
+
+                ))}
+
+              </div>
+
+            ) : (
+
+              /* =================================================
+                 NENHUM RESULTADO
+              ================================================= */
+
+              <div className="no-search-results">
+
+                <FaSearch />
+
+                <h4>
+                  Nenhum produto encontrado
+                </h4>
+
+                <p>
+                  Tente pesquisar por outro
+                  nome, categoria ou produto.
+                </p>
+
+              </div>
 
             )}
 
+          </div>
 
-            {/* =================================================
-                MENU MOBILE
-            ================================================= */}
+        </section>
+      )}
 
-            <aside
-                className={`mobile-menu ${
-                    isMenuOpen ? "active" : ""
-                }`}
-            >
+      {/* =====================================================
+          MENU MOBILE
+      ===================================================== */}
 
-                <button
-                    onClick={() => {
-                        navigate("/");
-                        setIsMenuOpen(false);
-                    }}
-                >
-                    Home
-                </button>
+      <aside
+        className={`mobile-menu ${
+          isMenuOpen ? "active" : ""
+        }`}
+      >
 
+        <button
+          onClick={() => {
+            setSearch("");
+            navigate("/");
+            setIsMenuOpen(false);
+          }}
+        >
+          Home
+        </button>
 
-                <button
-                    onClick={() => {
-                        navigate("/cart");
-                        setIsMenuOpen(false);
-                    }}
-                >
-                    Carrinho
-                </button>
+        <button
+          onClick={() => {
+            setSearch("");
+            navigate("/cart");
+            setIsMenuOpen(false);
+          }}
+        >
+          Carrinho
+        </button>
 
+        {user ? (
 
-                {user ? (
+          <button onClick={handleLogout}>
+            Logout
+          </button>
 
-                    <button
-                        onClick={handleLogout}
-                    >
-                        Logout
-                    </button>
+        ) : (
 
-                ) : (
+          <button
+            onClick={() => {
+              setSearch("");
+              setShowLogin(true);
+              setIsMenuOpen(false);
+            }}
+          >
+            Sign In
+          </button>
 
-                    <button
-                        onClick={() => {
-                            setShowLogin(true);
-                            setIsMenuOpen(false);
-                        }}
-                    >
-                        Sign In
-                    </button>
+        )}
 
-                )}
-
-            </aside>
-
-        </>
-    );
+      </aside>
+    </>
+  );
 };
 
 export default NavBar;
