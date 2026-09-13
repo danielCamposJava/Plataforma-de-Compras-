@@ -6,7 +6,7 @@ import {
   getUserOrders,
   getAllOrdersWithItems,
   updateOrderStatus
-} from '../Controller/orderController.js';
+} from '../controller/OrderController.js';
 import {authenticateToken } from '../Middleware/authtenticationToken.js';
 
 const router = express.Router();

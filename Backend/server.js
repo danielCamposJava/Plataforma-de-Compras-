@@ -8,11 +8,10 @@ import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 
 import productRoutes from "./router/ProductsRouter.js";
-import userRoutes from "./Router/userRoutes.js";
-import orderRoutes from "./Router/createOrdeRoutes.js";
-import categoryRoutes from "./Router/categoryRouter.js";
-import tableRoutes from "./Router/tableRouter.js";
-import bookingRoutes from "./Router/bookingRouter.js";
+import userRoutes from "./router/UserRoutes.js";
+import orderRoutes from "./router/CreateOrdeRoutes.js";
+import categoryRoutes from "./router/CategoryRouter.js";
+import bookingRoutes from "./router/BookingRouter.js";
 
 dotenv.config();
 
@@ -151,8 +150,6 @@ app.use("/api/foods", productRoutes);
 app.use("/users", userRoutes);
 
 app.use("/category", categoryRoutes);
-
-app.use("/tables", tableRoutes);
 
 app.use("/booking", bookingRoutes);
 

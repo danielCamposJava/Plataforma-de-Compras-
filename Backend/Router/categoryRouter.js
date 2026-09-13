@@ -6,7 +6,7 @@ import {
     deleteCategory,
     getAllCategories,
     renameCategory
-} from '../Controller/categoryController.js';
+} from '../controller/CategoryController.js';
 
 import { upload } from '../utils/multer.js';
 

@@ -1,4 +1,4 @@
-import db from '../Config/database.js';
+import db from '../config/database.js';
 import { notifyNewOrder } from '../server.js'; // Para emitir eventos via Socket.io
 
 // Buscar pedidos de um usuário específico
