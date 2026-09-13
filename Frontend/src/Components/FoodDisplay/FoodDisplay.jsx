@@ -1,12 +1,13 @@
 import React, { useContext } from "react";
 import "./FoodDisplay.css";
+
 import { StoreContext } from "../../Content/StoreContent";
 import FoodItem from "../FoodItem/FoodItem";
 
 const FoodDisplay = () => {
     const { foodList } = useContext(StoreContext);
 
-    // Garantir que seja um array
+    // Garantir que foodList seja um array
     const foods = Array.isArray(foodList)
         ? foodList
         : [];
@@ -17,19 +18,37 @@ const FoodDisplay = () => {
     );
 
     return (
-        <div
+        <section
             className="food-display"
             id="food-display"
         >
-            <h2>Todos os Produtos</h2>
+            <div className="food-display-header">
+                <div>
+                    <h2>Todos os Produtos</h2>
 
-            <div className="food-display-list">
-                {foods.length === 0 ? (
                     <p>
-                        Nenhum produto encontrado.
+                        Encontre os melhores produtos
+                        para você
                     </p>
-                ) : (
-                    foods.map((item) => {
+                </div>
+
+                <span className="food-display-count">
+                    {foods.length} produtos
+                </span>
+            </div>
+
+            {foods.length === 0 ? (
+                <div className="food-display-empty">
+                    <h3>Nenhum produto encontrado</h3>
+
+                    <p>
+                        Não encontramos produtos
+                        disponíveis no momento.
+                    </p>
+                </div>
+            ) : (
+                <div className="food-display-list">
+                    {foods.map((item) => {
                         const productId =
                             item.id ?? item._id;
 
@@ -43,10 +62,10 @@ const FoodDisplay = () => {
                                 image={item.image}
                             />
                         );
-                    })
-                )}
-            </div>
-        </div>
+                    })}
+                </div>
+            )}
+        </section>
     );
 };
 

@@ -1,135 +1,329 @@
+/* =========================================================
+   FOOD DISPLAY
+========================================================= */
+
 .food-display {
-  width: 100%;
-  padding: 20px;
+    width: 100%;
+    min-height: 100vh;
+
+    padding: 30px 35px 60px;
+
+    background: #f5f5f5;
+
+    box-sizing: border-box;
 }
 
-.food-display h2 {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 25px;
-  color: #222;
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
+.food-display-header {
+    width: 100%;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+
+    border-bottom: 1px solid #e1e1e1;
+
+    box-sizing: border-box;
 }
+
+.food-display-header h2 {
+    margin: 0;
+
+    font-size: 24px;
+    font-weight: 700;
+
+    color: #222;
+}
+
+.food-display-header p {
+    margin: 6px 0 0;
+
+    font-size: 14px;
+
+    color: #777;
+}
+
+.food-display-count {
+    font-size: 14px;
+    font-weight: 500;
+
+    color: #666;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   LISTA DE PRODUTOS
+========================================================= */
 
 .food-display-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 18px;
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(190px, 1fr)
+    );
+
+    column-gap: 28px;
+    row-gap: 32px;
+
+    align-items: stretch;
+
+    box-sizing: border-box;
 }
 
-/* CARD */
-.food-item {
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid #ececec;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+
+/* =========================================================
+   GARANTIR MESMO TAMANHO DOS CARDS
+========================================================= */
+
+.food-display-list > * {
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+
+    box-sizing: border-box;
 }
 
-.food-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+
+/* =========================================================
+   NENHUM PRODUTO
+========================================================= */
+
+.food-display-empty {
+    width: 100%;
+    min-height: 300px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+
+    box-sizing: border-box;
 }
 
-/* IMAGEM */
-.food-item-image {
-  width: 100%;
-  height: 260px;
-  object-fit: cover;
-  background: #f5f5f5;
-}
+.food-display-empty h3 {
+    margin: 0 0 8px;
 
-/* CONTEÚDO */
-.food-item-info {
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.food-item-name-rating {
-  margin-bottom: 8px;
-}
-
-.food-item-name-rating p {
-  font-size: 15px;
-  font-weight: 600;
-  color: #222;
-  line-height: 1.4;
-}
-
-/* DESCRIÇÃO */
-.food-item-desc {
-  font-size: 13px;
-  color: #777;
-  line-height: 1.5;
-  height: 38px;
-  overflow: hidden;
-  margin-bottom: 10px;
-}
-
-/* PREÇO */
-.food-item-price {
-  margin-top: auto;
-  font-size: 22px;
-  font-weight: 700;
-  color: tomato;
-}
-
-/* TABLET */
-@media (max-width: 1024px) {
-  .food-display-list {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .food-item-image {
-    height: 220px;
-  }
-}
-
-/* MOBILE */
-@media (max-width: 768px) {
-  .food-display {
-    padding: 15px;
-  }
-
-  .food-display-list {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-
-  .food-item-image {
-    height: 180px;
-  }
-
-  .food-item-name-rating p {
-    font-size: 14px;
-  }
-
-  .food-item-price {
     font-size: 18px;
-  }
+    font-weight: 600;
+
+    color: #333;
 }
 
-/* CELULAR PEQUENO */
+.food-display-empty p {
+    margin: 0;
+
+    font-size: 14px;
+
+    color: #777;
+}
+
+
+/* =========================================================
+   TELAS GRANDES
+========================================================= */
+
+@media (min-width: 1400px) {
+
+    .food-display {
+        padding-left: 45px;
+        padding-right: 45px;
+    }
+
+    .food-display-list {
+        grid-template-columns: repeat(
+            auto-fill,
+            minmax(200px, 1fr)
+        );
+
+        column-gap: 32px;
+        row-gap: 36px;
+    }
+
+}
+
+
+/* =========================================================
+   NOTEBOOK
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    .food-display {
+        padding-left: 28px;
+        padding-right: 28px;
+    }
+
+    .food-display-list {
+        grid-template-columns: repeat(
+            auto-fill,
+            minmax(185px, 1fr)
+        );
+
+        column-gap: 24px;
+        row-gap: 30px;
+    }
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .food-display {
+        padding: 25px 22px 50px;
+    }
+
+    .food-display-list {
+        grid-template-columns: repeat(
+            auto-fill,
+            minmax(170px, 1fr)
+        );
+
+        column-gap: 20px;
+        row-gap: 25px;
+    }
+
+    .food-display-header {
+        margin-bottom: 24px;
+    }
+
+    .food-display-header h2 {
+        font-size: 22px;
+    }
+
+}
+
+
+/* =========================================================
+   TABLET PEQUENO
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .food-display {
+        padding: 22px 15px 45px;
+    }
+
+    .food-display-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 5px;
+
+        margin-bottom: 22px;
+    }
+
+    .food-display-header h2 {
+        font-size: 20px;
+    }
+
+    .food-display-header p {
+        font-size: 13px;
+    }
+
+    .food-display-count {
+        font-size: 13px;
+    }
+
+    .food-display-list {
+        grid-template-columns: repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+        column-gap: 16px;
+        row-gap: 24px;
+    }
+
+}
+
+
+/* =========================================================
+   CELULAR
+========================================================= */
+
 @media (max-width: 480px) {
-  .food-display-list {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
 
-  .food-item-image {
-    height: 150px;
-  }
+    .food-display {
+        padding: 18px 10px 35px;
+    }
 
-  .food-item-info {
-    padding: 10px;
-  }
+    .food-display-header {
+        margin-bottom: 18px;
+        padding-bottom: 12px;
+    }
 
-  .food-item-price {
-    font-size: 16px;
-  }
+    .food-display-header h2 {
+        font-size: 18px;
+    }
+
+    .food-display-header p {
+        font-size: 12px;
+    }
+
+    .food-display-count {
+        font-size: 12px;
+    }
+
+    .food-display-list {
+        grid-template-columns: repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+        column-gap: 10px;
+        row-gap: 18px;
+    }
+
+    .food-display-empty {
+        min-height: 240px;
+    }
+
+}
+
+
+/* =========================================================
+   CELULAR PEQUENO
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .food-display {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .food-display-list {
+        column-gap: 8px;
+        row-gap: 16px;
+    }
+
+    .food-display-header h2 {
+        font-size: 17px;
+    }
+
 }
