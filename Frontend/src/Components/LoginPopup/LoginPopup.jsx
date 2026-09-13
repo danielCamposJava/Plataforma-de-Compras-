@@ -1,21 +1,23 @@
+
 import React, {
     useState,
     useEffect,
     useContext
-} from 'react';
+} from "react";
 
-import './LoginPopup.css';
+import "./LoginPopup.css";
+import axios from "axios";
+import { assets } from "../../assets/frontend_assets/assets";
+import { useNavigate } from "react-router-dom";
+import { StoreContext } from "../../Content/StoreContent";
 
-import axios from 'axios';
-
-import { assets } from '../../assets/frontend_assets/assets';
-
-import { useNavigate } from 'react-router-dom';
-
-import { StoreContext } from '../../Content/StoreContent';
-
+const API_URL = "http://localhost:4000";
 
 const LoginPopup = ({ setShowLogin }) => {
+
+    // ============================================================
+    // ESTADOS
+    // ============================================================
 
     const [currState, setCurrState] = useState("Login");
 
@@ -23,27 +25,54 @@ const LoginPopup = ({ setShowLogin }) => {
         name: "",
         email: "",
         password: "",
-        isAdmin: false
+        role: "user",
+        cnpj: ""
     });
 
     const [errorMessage, setErrorMessage] = useState("");
     const [emailError, setEmailError] = useState("");
+    const [cnpjError, setCnpjError] = useState("");
+
     const [isLoading, setIsLoading] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [isVerifyingToken, setIsVerifyingToken] = useState(true);
 
+    const [toast, setToast] = useState({
+        show: false,
+        type: "",
+        message: ""
+    });
+
     const navigate = useNavigate();
 
-    /*
-     * IMPORTANTE:
-     * O setUser atualiza a navbar imediatamente depois do login.
-     */
     const { setUser } = useContext(StoreContext);
 
+    // ============================================================
+    // TOAST
+    // ============================================================
 
-    /* =====================================================
-       VERIFICAR SESSÃO EXISTENTE
-    ===================================================== */
+    const showToast = (type, message) => {
+
+        setToast({
+            show: true,
+            type,
+            message
+        });
+
+        setTimeout(() => {
+
+            setToast({
+                show: false,
+                type: "",
+                message: ""
+            });
+
+        }, 3500);
+    };
+
+    // ============================================================
+    // VERIFICAR TOKEN
+    // ============================================================
 
     useEffect(() => {
 
@@ -53,6 +82,7 @@ const LoginPopup = ({ setShowLogin }) => {
             const savedUser = localStorage.getItem("user");
 
             if (!token) {
+
                 setIsVerifyingToken(false);
                 return;
             }
@@ -60,7 +90,7 @@ const LoginPopup = ({ setShowLogin }) => {
             try {
 
                 const response = await axios.get(
-                    "http://localhost:4000/users/verify-token",
+                    `${API_URL}/users/verify-token`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -68,10 +98,6 @@ const LoginPopup = ({ setShowLogin }) => {
                     }
                 );
 
-                /*
-                 * Se o backend retornar o usuário,
-                 * usamos ele.
-                 */
                 let loggedUser = null;
 
                 if (response.data?.user) {
@@ -81,8 +107,11 @@ const LoginPopup = ({ setShowLogin }) => {
                 } else if (savedUser) {
 
                     try {
+
                         loggedUser = JSON.parse(savedUser);
+
                     } catch {
+
                         loggedUser = null;
                     }
                 }
@@ -92,8 +121,11 @@ const LoginPopup = ({ setShowLogin }) => {
                     setUser(loggedUser);
 
                     if (loggedUser.role === "admin") {
+
                         navigate("/admin");
+
                     } else {
+
                         navigate("/profile");
                     }
                 }
@@ -119,13 +151,11 @@ const LoginPopup = ({ setShowLogin }) => {
             }
         };
 
-
         verifySession();
 
-
-        /* =====================================================
-           REMEMBER ME
-        ===================================================== */
+        // ========================================================
+        // REMEMBER ME
+        // ========================================================
 
         const savedEmail =
             localStorage.getItem("storedEmail");
@@ -148,10 +178,9 @@ const LoginPopup = ({ setShowLogin }) => {
 
     }, [navigate, setUser]);
 
-
-    /* =====================================================
-       INPUTS
-    ===================================================== */
+    // ============================================================
+    // ALTERAÇÃO DOS INPUTS
+    // ============================================================
 
     const handleChange = (e) => {
 
@@ -162,6 +191,9 @@ const LoginPopup = ({ setShowLogin }) => {
             checked
         } = e.target;
 
+        // ========================================================
+        // EMAIL
+        // ========================================================
 
         if (name === "email") {
 
@@ -171,7 +203,8 @@ const LoginPopup = ({ setShowLogin }) => {
             }));
 
             if (
-                !/\S+@\S+\.\S+/.test(value)
+                value &&
+                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
             ) {
 
                 setEmailError(
@@ -186,6 +219,40 @@ const LoginPopup = ({ setShowLogin }) => {
             return;
         }
 
+        // ========================================================
+        // CNPJ
+        // ========================================================
+
+        if (name === "cnpj") {
+
+            const numbers =
+                value.replace(/\D/g, "");
+
+            setFormData(prev => ({
+                ...prev,
+                cnpj: numbers
+            }));
+
+            if (
+                numbers.length > 0 &&
+                numbers.length !== 14
+            ) {
+
+                setCnpjError(
+                    "O CNPJ deve possuir 14 números."
+                );
+
+            } else {
+
+                setCnpjError("");
+            }
+
+            return;
+        }
+
+        // ========================================================
+        // CHECKBOX
+        // ========================================================
 
         if (type === "checkbox") {
 
@@ -197,6 +264,9 @@ const LoginPopup = ({ setShowLogin }) => {
             return;
         }
 
+        // ========================================================
+        // SELECT E OUTROS
+        // ========================================================
 
         setFormData(prev => ({
             ...prev,
@@ -204,25 +274,17 @@ const LoginPopup = ({ setShowLogin }) => {
         }));
     };
 
-
-    /* =====================================================
-       VALIDAÇÃO
-    ===================================================== */
+    // ============================================================
+    // VALIDAÇÃO
+    // ============================================================
 
     const validateForm = () => {
 
-        if (
-            currState === "Sign Up" &&
-            !formData.name.trim()
-        ) {
+        setErrorMessage("");
 
-            setErrorMessage(
-                "Nome é obrigatório."
-            );
-
-            return false;
-        }
-
+        // ========================================================
+        // EMAIL
+        // ========================================================
 
         if (
             !formData.email.trim() ||
@@ -230,12 +292,15 @@ const LoginPopup = ({ setShowLogin }) => {
         ) {
 
             setErrorMessage(
-                "É necessário um e-mail válido."
+                "Informe um e-mail válido."
             );
 
             return false;
         }
 
+        // ========================================================
+        // SENHA
+        // ========================================================
 
         if (
             formData.password.trim().length < 6
@@ -248,14 +313,118 @@ const LoginPopup = ({ setShowLogin }) => {
             return false;
         }
 
+        // ========================================================
+        // CADASTRO
+        // ========================================================
+
+        if (currState === "Sign Up") {
+
+            if (!formData.name.trim()) {
+
+                setErrorMessage(
+                    "Nome é obrigatório."
+                );
+
+                return false;
+            }
+
+            // ====================================================
+            // CNPJ
+            // ====================================================
+
+            if (formData.role === "seller") {
+
+                const cnpj =
+                    formData.cnpj.replace(/\D/g, "");
+
+                if (cnpj.length !== 14) {
+
+                    setErrorMessage(
+                        "Informe um CNPJ válido com 14 números."
+                    );
+
+                    return false;
+                }
+            }
+        }
 
         return true;
     };
 
+    // ============================================================
+    // PEGAR MENSAGEM DO AXIOS
+    // ============================================================
 
-    /* =====================================================
-       SUBMIT
-    ===================================================== */
+    const getErrorMessage = (error) => {
+
+        // --------------------------------------------------------
+        // Sem resposta do servidor
+        // --------------------------------------------------------
+
+        if (!error.response) {
+
+            if (error.request) {
+
+                return "Não foi possível conectar ao servidor. Verifique se o backend está rodando na porta 4000.";
+
+            }
+
+            return (
+                error.message ||
+                "Erro ao realizar a requisição."
+            );
+        }
+
+        // --------------------------------------------------------
+        // Backend respondeu
+        // --------------------------------------------------------
+
+        const data = error.response.data;
+
+        if (typeof data === "string") {
+            return data;
+        }
+
+        if (data?.message) {
+            return data.message;
+        }
+
+        if (data?.error) {
+            return data.error;
+        }
+
+        // --------------------------------------------------------
+        // Status HTTP
+        // --------------------------------------------------------
+
+        switch (error.response.status) {
+
+            case 400:
+                return "Dados inválidos. Verifique os campos.";
+
+            case 401:
+                return "E-mail ou senha incorretos.";
+
+            case 403:
+                return "Você não possui permissão para realizar esta ação.";
+
+            case 404:
+                return "Rota não encontrada no servidor.";
+
+            case 409:
+                return "Este e-mail já está cadastrado.";
+
+            case 500:
+                return "Erro interno no servidor.";
+
+            default:
+                return `Erro no servidor. Código: ${error.response.status}`;
+        }
+    };
+
+    // ============================================================
+    // SUBMIT
+    // ============================================================
 
     const handleSubmit = async (e) => {
 
@@ -269,60 +438,92 @@ const LoginPopup = ({ setShowLogin }) => {
 
         setIsLoading(true);
 
-
         try {
 
-            /* =================================================
-               CADASTRO
-            ================================================= */
+            // ====================================================
+            // CADASTRO
+            // ====================================================
 
             if (currState === "Sign Up") {
 
-                const response = await axios.post(
-                    "http://localhost:4000/users/register",
-                    {
-                        name: formData.name,
-                        email: formData.email,
-                        password: formData.password,
+                const registerData = {
+                    name: formData.name.trim(),
+                    email: formData.email.trim(),
+                    password: formData.password,
+                    role: formData.role
+                };
 
-                        role: formData.isAdmin
-                            ? "admin"
-                            : "user"
+                // CNPJ somente para vendedor
+                if (formData.role === "seller") {
+
+                    registerData.cnpj =
+                        formData.cnpj.replace(/\D/g, "");
+                }
+
+                console.log(
+                    "Dados enviados para cadastro:",
+                    registerData
+                );
+
+                const response = await axios.post(
+                    `${API_URL}/users/register`,
+                    registerData,
+                    {
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        timeout: 10000
                     }
                 );
 
-
-                alert(
-                    response.data.message ||
+                showToast(
+                    "success",
+                    response.data?.message ||
                     "Conta criada com sucesso!"
                 );
 
+                // ------------------------------------------------
+                // VOLTAR PARA LOGIN
+                // ------------------------------------------------
 
                 setCurrState("Login");
 
                 setFormData(prev => ({
                     ...prev,
+                    name: "",
                     password: "",
-                    isAdmin: false
+                    role: "user",
+                    cnpj: ""
                 }));
 
+                setEmailError("");
+                setCnpjError("");
+                setErrorMessage("");
 
                 return;
             }
 
-
-            /* =================================================
-               LOGIN
-            ================================================= */
+            // ====================================================
+            // LOGIN
+            // ====================================================
 
             const response = await axios.post(
-                "http://localhost:4000/users/login",
+                `${API_URL}/users/login`,
                 {
-                    email: formData.email,
+                    email: formData.email.trim(),
                     password: formData.password
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    timeout: 10000
                 }
             );
 
+            // ====================================================
+            // VALIDAR RESPOSTA
+            // ====================================================
 
             if (
                 !response.data ||
@@ -330,82 +531,65 @@ const LoginPopup = ({ setShowLogin }) => {
                 !response.data.user
             ) {
 
-                setErrorMessage(
-                    "Falha no login. Verifique suas credenciais."
+                showToast(
+                    "error",
+                    "O servidor não retornou os dados de autenticação."
                 );
 
                 return;
             }
-
 
             const {
                 token,
                 user
             } = response.data;
 
-
-            /* =================================================
-               SALVAR SESSÃO
-            ================================================= */
+            // ====================================================
+            // SALVAR TOKEN
+            // ====================================================
 
             localStorage.setItem(
                 "token",
                 token
             );
 
+            // ====================================================
+            // SALVAR USUÁRIO
+            // ====================================================
 
-            /*
-             * Salva o usuário completo.
-             * Isso permite recuperar a sessão depois
-             * que a página for atualizada.
-             */
             localStorage.setItem(
                 "user",
                 JSON.stringify(user)
             );
 
+            // ====================================================
+            // COMPATIBILIDADE
+            // ====================================================
 
-            /*
-             * Mantemos também seus dados antigos
-             * para não quebrar outras partes do projeto.
-             */
             localStorage.setItem(
                 "userName",
-                user.name
+                user.name || ""
             );
 
             localStorage.setItem(
                 "userId",
-                user.id
+                user.id || ""
             );
 
             localStorage.setItem(
                 "userRole",
-                user.role
+                user.role || "user"
             );
 
+            // ====================================================
+            // CONTEXTO
+            // ====================================================
 
-            /* =================================================
-               ATUALIZAR CONTEXTO
-            ================================================= */
-
-            /*
-             * ESSA LINHA É FUNDAMENTAL.
-             *
-             * Faz a NavBar mudar de:
-             *
-             * Sign In
-             *
-             * para:
-             *
-             * Nome + Logout
-             */
             setUser(user);
 
-
-            /* =================================================
-               REMEMBER ME
-            ================================================= */
+            // ====================================================
+            // REMEMBER ME
+            // ====================================================
 
             if (rememberMe) {
 
@@ -430,38 +614,79 @@ const LoginPopup = ({ setShowLogin }) => {
                 );
             }
 
+            // ====================================================
+            // TOAST
+            // ====================================================
 
-            /* =================================================
-               FECHAR LOGIN
-            ================================================= */
+            showToast(
+                "success",
+                `Bem-vindo, ${user.name || "usuário"}!`
+            );
 
-            setShowLogin(false);
+            // ====================================================
+            // FECHAR E REDIRECIONAR
+            // ====================================================
 
+            setTimeout(() => {
 
-            /* =================================================
-               REDIRECIONAMENTO
-            ================================================= */
+                setShowLogin(false);
 
-            if (user.role === "admin") {
+                if (user.role === "admin") {
 
-                navigate("/admin");
+                    navigate("/admin");
 
-            } else {
+                } else if (user.role === "seller") {
 
-                navigate("/profile");
-            }
+                    navigate("/profile");
 
+                } else {
+
+                    navigate("/profile");
+                }
+
+            }, 800);
 
         } catch (error) {
 
             console.error(
-                "Erro no login:",
+                "========== ERRO NA AUTENTICAÇÃO =========="
+            );
+
+            console.error(
+                "Erro:",
                 error
             );
 
-            setErrorMessage(
-                error.response?.data?.message ||
-                "Ocorreu um erro inesperado. Tente novamente."
+            console.error(
+                "Mensagem:",
+                error.message
+            );
+
+            console.error(
+                "Status:",
+                error.response?.status
+            );
+
+            console.error(
+                "Resposta:",
+                error.response?.data
+            );
+
+            console.error(
+                "URL:",
+                error.config?.url
+            );
+
+            console.error(
+                "=========================================="
+            );
+
+            const message =
+                getErrorMessage(error);
+
+            showToast(
+                "error",
+                message
             );
 
         } finally {
@@ -470,14 +695,14 @@ const LoginPopup = ({ setShowLogin }) => {
         }
     };
 
-
-    /* =====================================================
-       LOADING
-    ===================================================== */
+    // ============================================================
+    // LOADING
+    // ============================================================
 
     if (isVerifyingToken) {
 
         return (
+
             <div
                 className="login-popup loading"
                 role="status"
@@ -494,10 +719,9 @@ const LoginPopup = ({ setShowLogin }) => {
         );
     }
 
-
-    /* =====================================================
-       INTERFACE
-    ===================================================== */
+    // ============================================================
+    // INTERFACE
+    // ============================================================
 
     return (
 
@@ -507,12 +731,58 @@ const LoginPopup = ({ setShowLogin }) => {
             aria-modal="true"
         >
 
+            {/* ====================================================
+                TOAST
+            ===================================================== */}
+
+            {toast.show && (
+
+                <div
+                    className={`auth-toast ${toast.type}`}
+                    role="alert"
+                >
+
+                    <div className="auth-toast-icon">
+
+                        {toast.type === "success"
+                            ? "✓"
+                            : "✕"
+                        }
+
+                    </div>
+
+                    <div className="auth-toast-content">
+
+                        <strong>
+
+                            {toast.type === "success"
+                                ? "Sucesso"
+                                : "Erro"
+                            }
+
+                        </strong>
+
+                        <span>
+                            {toast.message}
+                        </span>
+
+                    </div>
+
+                </div>
+            )}
+
+            {/* ====================================================
+                FORMULÁRIO
+            ===================================================== */}
+
             <form
                 className="login-popup-container"
                 onSubmit={handleSubmit}
             >
 
-                {/* HEADER */}
+                {/* =================================================
+                    HEADER
+                ================================================== */}
 
                 <div className="login-popup-header">
 
@@ -525,10 +795,12 @@ const LoginPopup = ({ setShowLogin }) => {
                     <div className="login-popup-title">
 
                         <h2>
+
                             {currState === "Login"
                                 ? "Entrar"
                                 : "Criar conta"
                             }
+
                         </h2>
 
                         <img
@@ -544,42 +816,94 @@ const LoginPopup = ({ setShowLogin }) => {
 
                 </div>
 
-
-                {/* INPUTS */}
+                {/* =================================================
+                    INPUTS
+                ================================================== */}
 
                 <div className="login-popup-inputs">
+
+                    {/* =================================================
+                        CADASTRO
+                    ================================================== */}
 
                     {currState === "Sign Up" && (
 
                         <>
 
+                            {/* NOME */}
+
                             <input
                                 type="text"
                                 name="name"
-                                placeholder="Seu nome"
+                                placeholder="Seu nome ou nome da empresa"
                                 value={formData.name}
                                 onChange={handleChange}
                                 required
                             />
 
+                            {/* TIPO DE CONTA */}
 
-                            <label className="admin-checkbox-label">
+                            <div className="account-type">
 
-                                <input
-                                    type="checkbox"
-                                    name="isAdmin"
-                                    checked={formData.isAdmin}
+                                <label htmlFor="role">
+                                    Tipo de conta
+                                </label>
+
+                                <select
+                                    id="role"
+                                    name="role"
+                                    value={formData.role}
                                     onChange={handleChange}
-                                />
+                                >
 
-                                Registrar como empresa
+                                    <option value="user">
+                                        Cliente
+                                    </option>
 
-                            </label>
+                                    <option value="seller">
+                                        Empresa / Vendedor
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            {/* =================================================
+                                CNPJ
+                            ================================================== */}
+
+                            {formData.role === "seller" && (
+
+                                <>
+
+                                    <input
+                                        type="text"
+                                        name="cnpj"
+                                        placeholder="CNPJ"
+                                        value={formData.cnpj}
+                                        onChange={handleChange}
+                                        maxLength={14}
+                                        inputMode="numeric"
+                                        required
+                                    />
+
+                                    {cnpjError && (
+
+                                        <p className="error-message">
+                                            {cnpjError}
+                                        </p>
+
+                                    )}
+
+                                </>
+                            )}
 
                         </>
-
                     )}
 
+                    {/* =================================================
+                        EMAIL
+                    ================================================== */}
 
                     <input
                         type="email"
@@ -590,7 +914,6 @@ const LoginPopup = ({ setShowLogin }) => {
                         required
                     />
 
-
                     {emailError && (
 
                         <p className="error-message">
@@ -599,6 +922,9 @@ const LoginPopup = ({ setShowLogin }) => {
 
                     )}
 
+                    {/* =================================================
+                        SENHA
+                    ================================================== */}
 
                     <input
                         type="password"
@@ -609,6 +935,9 @@ const LoginPopup = ({ setShowLogin }) => {
                         required
                     />
 
+                    {/* =================================================
+                        LEMBRAR DE MIM
+                    ================================================== */}
 
                     {currState === "Login" && (
 
@@ -630,13 +959,13 @@ const LoginPopup = ({ setShowLogin }) => {
                             </label>
 
                         </div>
-
                     )}
 
                 </div>
 
-
-                {/* ERRO */}
+                {/* =================================================
+                    ERRO
+                ================================================== */}
 
                 {errorMessage && (
 
@@ -646,8 +975,9 @@ const LoginPopup = ({ setShowLogin }) => {
 
                 )}
 
-
-                {/* BOTÃO */}
+                {/* =================================================
+                    BOTÃO
+                ================================================== */}
 
                 <button
                     type="submit"
@@ -655,7 +985,7 @@ const LoginPopup = ({ setShowLogin }) => {
                 >
 
                     {isLoading
-                        ? "Entrando..."
+                        ? "Processando..."
                         : currState === "Sign Up"
                             ? "Criar conta"
                             : "Entrar"
@@ -663,8 +993,9 @@ const LoginPopup = ({ setShowLogin }) => {
 
                 </button>
 
-
-                {/* ALTERAR LOGIN/CADASTRO */}
+                {/* =================================================
+                    TROCAR LOGIN / CADASTRO
+                ================================================== */}
 
                 {currState === "Login" ? (
 
@@ -673,10 +1004,23 @@ const LoginPopup = ({ setShowLogin }) => {
                         Não tem uma conta?{" "}
 
                         <span
-                            onClick={() =>
-                                setCurrState("Sign Up")
-                            }
                             className="toggle-state"
+                            onClick={() => {
+
+                                setCurrState("Sign Up");
+
+                                setErrorMessage("");
+                                setEmailError("");
+                                setCnpjError("");
+
+                                setFormData(prev => ({
+                                    ...prev,
+                                    name: "",
+                                    password: "",
+                                    role: "user",
+                                    cnpj: ""
+                                }));
+                            }}
                         >
                             Cadastre-se
                         </span>
@@ -690,16 +1034,27 @@ const LoginPopup = ({ setShowLogin }) => {
                         Já tem uma conta?{" "}
 
                         <span
-                            onClick={() =>
-                                setCurrState("Login")
-                            }
                             className="toggle-state"
+                            onClick={() => {
+
+                                setCurrState("Login");
+
+                                setErrorMessage("");
+                                setEmailError("");
+                                setCnpjError("");
+
+                                setFormData(prev => ({
+                                    ...prev,
+                                    password: "",
+                                    role: "user",
+                                    cnpj: ""
+                                }));
+                            }}
                         >
                             Faça login
                         </span>
 
                     </p>
-
                 )}
 
             </form>

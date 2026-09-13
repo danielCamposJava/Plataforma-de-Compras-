@@ -1,16 +1,12 @@
+
 /* =========================================================
-   LOGIN POPUP
-========================================================= */
+   LOGIN POPUP - E-COMMERCE MODERNO
+   ========================================================= */
 
 .login-popup {
     position: fixed;
-
     inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    background: rgba(0, 0, 0, 0.55);
+    z-index: 9999;
 
     display: flex;
     align-items: center;
@@ -18,102 +14,106 @@
 
     padding: 20px;
 
-    z-index: 2000;
+    background: rgba(0, 0, 0, 0.55);
 
-    backdrop-filter: blur(3px);
+    backdrop-filter: blur(7px);
+
+    animation: popupFadeIn 0.25s ease;
 }
 
 
 /* =========================================================
-   CONTAINER
-========================================================= */
+   CONTAINER PRINCIPAL
+   ========================================================= */
 
 .login-popup-container {
+    position: relative;
+
     width: 100%;
     max-width: 430px;
 
-    background: #ffffff;
+    padding: 32px;
 
-    padding: 30px;
+    background: #ffffff;
 
     border-radius: 18px;
 
-    box-shadow:
-        0 15px 45px rgba(0, 0, 0, 0.18);
-
-    animation: loginPopupAnimation 0.25s ease;
-
     box-sizing: border-box;
-}
 
-@keyframes loginPopupAnimation {
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.20);
 
-    from {
-        opacity: 0;
-        transform: translateY(-15px) scale(0.98);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+    animation: popupScaleIn 0.3s ease;
 }
 
 
 /* =========================================================
    HEADER
-========================================================= */
+   ========================================================= */
 
 .login-popup-header {
     display: flex;
     flex-direction: column;
+    align-items: center;
 
-    gap: 15px;
-
-    margin-bottom: 25px;
+    margin-bottom: 26px;
 }
 
 .login-popup-logo {
-    width: auto;
-    height: 55px;
+    width: 58px;
+    height: 58px;
 
     object-fit: contain;
 
-    align-self: center;
+    margin-bottom: 12px;
 }
 
 .login-popup-title {
+    position: relative;
+
+    width: 100%;
+
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .login-popup-title h2 {
     margin: 0;
 
-    font-size: 24px;
-    font-weight: 700;
+    color: #222222;
 
-    color: #222;
+    font-size: 25px;
+    font-weight: 700;
 }
 
 .login-popup-title img {
+    position: absolute;
+
+    right: 0;
+
     width: 18px;
     height: 18px;
 
     cursor: pointer;
 
-    transition: transform 0.2s ease;
+    opacity: 0.6;
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
 }
 
 .login-popup-title img:hover {
+    opacity: 1;
+
     transform: rotate(90deg);
 }
 
 
 /* =========================================================
    INPUTS
-========================================================= */
+   ========================================================= */
 
 .login-popup-inputs {
     display: flex;
@@ -122,77 +122,116 @@
     gap: 14px;
 }
 
-.login-popup-inputs input[type="text"],
-.login-popup-inputs input[type="email"],
-.login-popup-inputs input[type="password"] {
+.login-popup-inputs input {
     width: 100%;
-
     height: 48px;
 
     padding: 0 15px;
 
-    border: 1px solid #dddddd;
+    box-sizing: border-box;
+
+    border: 1px solid #e3e3e3;
 
     border-radius: 10px;
 
     outline: none;
 
+    background: #fafafa;
+
+    color: #222222;
+
     font-size: 14px;
-
-    color: #333;
-
-    background: #ffffff;
-
-    box-sizing: border-box;
 
     transition:
         border-color 0.2s ease,
+        background 0.2s ease,
         box-shadow 0.2s ease;
 }
 
+.login-popup-inputs input::placeholder {
+    color: #999999;
+}
+
+.login-popup-inputs input:hover {
+    background: #ffffff;
+}
+
 .login-popup-inputs input:focus {
+    background: #ffffff;
+
     border-color: tomato;
 
     box-shadow:
         0 0 0 3px rgba(255, 99, 71, 0.12);
 }
 
-.login-popup-inputs input::placeholder {
-    color: #999;
-}
-
 
 /* =========================================================
-   CHECKBOX ADMIN
-========================================================= */
+   TIPO DE CONTA
+   ========================================================= */
 
-.admin-checkbox-label {
+.account-type {
+    width: 100%;
+
     display: flex;
+    flex-direction: column;
 
-    align-items: center;
+    gap: 7px;
+}
 
-    gap: 8px;
-
-    color: #555;
+.account-type label {
+    color: #555555;
 
     font-size: 13px;
 
-    cursor: pointer;
+    font-weight: 600;
 }
 
-.admin-checkbox-label input {
-    width: 16px;
-    height: 16px;
+.account-type select {
+    width: 100%;
+    height: 48px;
 
-    accent-color: tomato;
+    padding: 0 14px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #e3e3e3;
+
+    border-radius: 10px;
+
+    outline: none;
+
+    background: #fafafa;
+
+    color: #333333;
+
+    font-size: 14px;
 
     cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.account-type select:hover {
+    background: #ffffff;
+}
+
+.account-type select:focus {
+    background: #ffffff;
+
+    border-color: tomato;
+
+    box-shadow:
+        0 0 0 3px rgba(255, 99, 71, 0.12);
 }
 
 
 /* =========================================================
-   REMEMBER ME
-========================================================= */
+   LEMBRAR DE MIM
+   ========================================================= */
 
 .login-popup-remember {
     display: flex;
@@ -208,45 +247,31 @@
     width: 16px;
     height: 16px;
 
+    margin: 0;
+
     accent-color: tomato;
 
     cursor: pointer;
 }
 
 .login-popup-remember label {
-    font-size: 13px;
+    color: #666666;
 
-    color: #666;
+    font-size: 13px;
 
     cursor: pointer;
 }
 
 
 /* =========================================================
-   ERROS
-========================================================= */
-
-.error-message {
-    margin: 5px 0 0;
-
-    color: #d32f2f;
-
-    font-size: 13px;
-
-    line-height: 1.4;
-}
-
-
-/* =========================================================
-   BOTÃO PRINCIPAL
-========================================================= */
+   BOTÃO
+   ========================================================= */
 
 .login-popup-container > button {
     width: 100%;
+    height: 50px;
 
-    height: 48px;
-
-    margin-top: 22px;
+    margin-top: 20px;
 
     border: none;
 
@@ -258,9 +283,12 @@
 
     font-size: 15px;
 
-    font-weight: 600;
+    font-weight: 700;
 
     cursor: pointer;
+
+    box-shadow:
+        0 6px 15px rgba(255, 99, 71, 0.20);
 
     transition:
         background 0.2s ease,
@@ -268,82 +296,335 @@
         box-shadow 0.2s ease;
 }
 
-.login-popup-container > button:hover:not(:disabled) {
-    background: #e64a19;
+.login-popup-container > button:hover {
+    background: #f4512f;
 
-    transform: translateY(-1px);
+    transform: translateY(-2px);
 
     box-shadow:
-        0 5px 15px rgba(255, 99, 71, 0.25);
+        0 10px 22px rgba(255, 99, 71, 0.28);
+}
+
+.login-popup-container > button:active {
+    transform: translateY(0);
 }
 
 .login-popup-container > button:disabled {
     opacity: 0.65;
 
     cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
 }
 
 
 /* =========================================================
    TEXTO INFERIOR
-========================================================= */
+   ========================================================= */
 
 .login-popup-container > p {
-    margin: 20px 0 0;
+    margin: 18px 0 0;
 
     text-align: center;
 
-    color: #777;
+    color: #777777;
 
     font-size: 13px;
+
+    line-height: 1.5;
 }
 
 .toggle-state {
     color: tomato;
 
-    font-weight: 600;
+    font-weight: 700;
 
     cursor: pointer;
+
+    transition: color 0.2s ease;
 }
 
 .toggle-state:hover {
+    color: #e8482d;
+
     text-decoration: underline;
 }
 
 
 /* =========================================================
-   LOADING
-========================================================= */
+   ERROS DOS CAMPOS
+   ========================================================= */
 
-.login-popup.loading {
-    background: #ffffff;
+.error-message {
+    margin: -5px 0 0;
+
+    padding: 0 3px;
+
+    color: #dc2626;
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+    line-height: 1.4;
 }
 
-.logo-spinner {
-    width: 90px;
-    height: auto;
 
-    animation: logoPulse 1.2s infinite ease-in-out;
+/* =========================================================
+   =========================================================
+   ALERTA / TOAST
+   =========================================================
+   ========================================================= */
+
+/*
+   POSIÇÃO:
+   canto superior direito
+
+   ENTRADA:
+   direita -> esquerda
+
+   SAÍDA:
+   esquerda -> direita
+*/
+
+.auth-toast {
+    position: fixed;
+
+    top: 25px;
+    right: 25px;
+
+    z-index: 999999;
+
+    width: 360px;
+    max-width: calc(100vw - 30px);
+
+    min-height: 64px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 14px 17px;
+
+    box-sizing: border-box;
+
+    border-radius: 12px;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.22);
+
+    /*
+       Entrada imediatamente
+       Saída depois de 3.15 segundos
+    */
+    animation:
+        toastSlideIn 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        toastSlideOut 0.40s ease-in 3.15s forwards;
 }
 
-@keyframes logoPulse {
 
-    0%,
-    100% {
-        opacity: 0.45;
-        transform: scale(0.95);
+/* =========================================================
+   TOAST VERDE
+   ========================================================= */
+
+.auth-toast.success {
+    background: #16a34a;
+}
+
+
+/* =========================================================
+   TOAST VERMELHO
+   ========================================================= */
+
+.auth-toast.error {
+    background: #dc2626;
+}
+
+
+/* =========================================================
+   ÍCONE
+   ========================================================= */
+
+.auth-toast-icon {
+    width: 35px;
+    height: 35px;
+
+    min-width: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.20);
+
+    color: #ffffff;
+
+    font-size: 17px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   CONTEÚDO
+   ========================================================= */
+
+.auth-toast-content {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+
+    min-width: 0;
+}
+
+.auth-toast-content strong {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    font-weight: 800;
+}
+
+.auth-toast-content span {
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    line-height: 1.4;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   ANIMAÇÃO
+   DIREITA -> ESQUERDA
+   ========================================================= */
+
+@keyframes toastSlideIn {
+
+    0% {
+        opacity: 0;
+
+        transform:
+            translateX(120%);
     }
 
-    50% {
+    100% {
         opacity: 1;
-        transform: scale(1);
+
+        transform:
+            translateX(0);
     }
 }
 
 
 /* =========================================================
-   TABLET
-========================================================= */
+   SAÍDA
+   ESQUERDA -> DIREITA
+   ========================================================= */
+
+@keyframes toastSlideOut {
+
+    0% {
+        opacity: 1;
+
+        transform:
+            translateX(0);
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translateX(120%);
+    }
+}
+
+
+/* =========================================================
+   ANIMAÇÃO DO POPUP
+   ========================================================= */
+
+@keyframes popupFadeIn {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes popupScaleIn {
+
+    from {
+        opacity: 0;
+
+        transform:
+            scale(0.94)
+            translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            scale(1)
+            translateY(0);
+    }
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.login-popup.loading {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-spinner {
+    width: 60px;
+    height: 60px;
+
+    object-fit: contain;
+
+    animation:
+        logoSpin 1s linear infinite;
+}
+
+@keyframes logoSpin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
 
 @media (max-width: 600px) {
 
@@ -354,50 +635,83 @@
     .login-popup-container {
         max-width: 100%;
 
-        padding: 25px;
+        padding: 25px 20px;
 
         border-radius: 16px;
     }
 
     .login-popup-logo {
-        height: 48px;
+        width: 52px;
+        height: 52px;
     }
 
     .login-popup-title h2 {
         font-size: 22px;
     }
+
+    .login-popup-inputs input,
+    .account-type select {
+        height: 46px;
+    }
+
+    .login-popup-container > button {
+        height: 48px;
+    }
+
+
+    /* ================================================
+       TOAST MOBILE
+       ================================================ */
+
+    .auth-toast {
+        top: 15px;
+
+        right: 15px;
+        left: auto;
+
+        width: calc(100vw - 30px);
+
+        max-width: 380px;
+    }
 }
 
 
 /* =========================================================
-   CELULAR
-========================================================= */
+   TELAS MUITO PEQUENAS
+   ========================================================= */
 
-@media (max-width: 400px) {
-
-    .login-popup {
-        padding: 10px;
-    }
+@media (max-width: 380px) {
 
     .login-popup-container {
-        padding: 22px 18px;
-
-        border-radius: 14px;
+        padding: 22px 16px;
     }
 
-    .login-popup-inputs {
-        gap: 12px;
+    .login-popup-title h2 {
+        font-size: 20px;
     }
 
-    .login-popup-inputs input[type="text"],
-    .login-popup-inputs input[type="email"],
-    .login-popup-inputs input[type="password"] {
-        height: 46px;
+    .auth-toast {
+        top: 12px;
 
-        font-size: 14px;
+        right: 12px;
+
+        width: calc(100vw - 24px);
+
+        padding: 12px 14px;
     }
 
-    .login-popup-container > button {
-        height: 46px;
+    .auth-toast-icon {
+        width: 32px;
+        height: 32px;
+
+        min-width: 32px;
+    }
+
+    .auth-toast-content strong {
+        font-size: 13px;
+    }
+
+    .auth-toast-content span {
+        font-size: 12px;
     }
 }
