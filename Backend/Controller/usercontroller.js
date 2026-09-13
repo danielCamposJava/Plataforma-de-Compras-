@@ -2,7 +2,7 @@ import{
 
   registerUser,
   loginUser
-} from '../service/UserService'
+} from '../service/UserService.js'
 
 
 export const register = async ( req , res ) =>{
