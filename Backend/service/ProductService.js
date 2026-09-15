@@ -1,8 +1,7 @@
 import * as repository from "../repositories/ProductRespository.js";
 
-// ======================================================
+
 // CRIAR PRODUTO
-// ======================================================
 
 export const createProduct = async (data, file) => {
     const { name, description, price, category } = data;
@@ -51,9 +50,7 @@ export const createProduct = async (data, file) => {
     };
 };
 
-// ======================================================
 // BUSCAR PRODUTO POR ID
-// ======================================================
 
 export const getProductById = async (id) => {
     const productId = Number(id);
@@ -71,9 +68,7 @@ export const getProductById = async (id) => {
     return product;
 };
 
-// ======================================================
-// BUSCAR TODOS OS PRODUTOS
-// ======================================================
+// BUSCAR TODOS OS PRODUTO
 
 export const getAllProducts = async (
     page = 0,
@@ -109,9 +104,8 @@ export const getAllProducts = async (
     };
 };
 
-// ======================================================
 // ATUALIZAR PRODUTO
-// ======================================================
+
 
 export const updateProduct = async (
     id,
@@ -187,9 +181,7 @@ export const updateProduct = async (
     return await repository.findById(productId);
 };
 
-// ======================================================
 // DELETAR PRODUTO
-// ======================================================
 
 export const deleteProduct = async (id) => {
     const productId = Number(id);

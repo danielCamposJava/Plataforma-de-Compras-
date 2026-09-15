@@ -103,7 +103,6 @@ export const createOrderService = async ({
 // CRIAR ITEM DO PEDIDO 
 
 export const createOrderItemService = async ({
-
     orderId,
     foodId,
     quantity, 
@@ -111,7 +110,6 @@ export const createOrderItemService = async ({
     name, 
     description, 
     image
-
 }) => {
 
     if(!orderId){

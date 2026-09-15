@@ -1,6 +1,7 @@
 
 import * as categoryRepository from "../repositories/CategoryRepository.js";
 
+//CRIAR CATEGORIA 
 
 export const createCategory = async (title, image) => {
 
@@ -18,6 +19,7 @@ export const createCategory = async (title, image) => {
     );
 };
 
+//BUSCAR TODAS AS CATEGORIAS 
 
 export const getAllCategories = async () => {
 
@@ -28,6 +30,8 @@ export const getAllCategories = async () => {
         : [];
 };
 
+
+//ATUALIZAR TODAS AS CATEGORIAS
 
 export const renameCategory = async (id, title) => {
 
@@ -51,6 +55,7 @@ export const renameCategory = async (id, title) => {
     return result;
 };
 
+//DELETAR TODAS AS CATEGORIAS 
 
 export const deleteCategory = async (id) => {
 
