@@ -22,12 +22,12 @@ export const findOrdeByUserId = (UserId) => {
 };
 
 export const createOrder = ({
-userId,
-total,
-paymentMethod,
-customerName,
-phoneNumber,
-discount
+  userId,
+  total,
+  paymentMethod,
+  customerName,
+  phoneNumber,
+  discount
 }) =>{
 
     return new Promise((resolve,reject) =>{

@@ -1,5 +1,4 @@
 import{
-
   registerUser,
   loginUser
 } from '../service/UserService.js'

@@ -9,7 +9,7 @@ import { fileURLToPath } from "url";
 
 import productRoutes from "./router/ProductsRouter.js";
 import userRoutes from "./router/UserRoutes.js";
-import orderRoutes from "./router/CreateOrdeRoutes.js";
+import orderRoutes from "./router/OrdeRoutes.js";
 import categoryRoutes from "./router/CategoryRouter.js";
 import bookingRoutes from "./router/BookingRouter.js";
 
@@ -150,8 +150,6 @@ app.use("/api/foods", productRoutes);
 app.use("/users", userRoutes);
 
 app.use("/category", categoryRoutes);
-
-app.use("/booking", bookingRoutes);
 
 // ======================================================
 // 404
